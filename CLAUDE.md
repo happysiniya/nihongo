@@ -10,7 +10,11 @@
   - 첫 버전(글자 위주)은 너무 쉽다는 피드백을 받았어요.
   - 화면 문구는 친절한 한국어 존댓말로 써요.
 - **기기:** 안드로이드 휴대폰 Chrome에서 **"앱 설치"**(PWA)로 깔아서 써요. 세로 화면 기준이에요.
-- **배포:** GitHub Pages. 저장소와 주소가 정해지면 여기에 적어요.
+- **배포:** GitHub Pages (`https://happysiniya.github.io/nihongo/`).
+  - 저장소: https://github.com/happysiniya/nihongo (Public, `main` 브랜치 루트에서 Pages 배포)
+  - PC 폴더 `c:\Users\KJS\Desktop\dev\dictionary`가 이 저장소와 git으로 연결돼 있어요 (`origin/main` 추적).
+  - `git push`하면 1~2분 뒤 사이트에 반영돼요. 인증은 Windows Git Credential Manager가 처리해요. `gh` CLI는 없어요.
+  - 큰 변경(예: 디자인 개편)은 브랜치에서 작업하고, 확인한 뒤 `main`에 합쳐요.
 - 서버나 로그인은 없어요. 기록과 내 문장은 휴대폰의 `localStorage`에만 있어요.
 
 ## 파일
