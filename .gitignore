@@ -1,0 +1,5 @@
+# Edge headless 스크린샷 때 그래픽 드라이버가 만드는 로그 폴더
+NVIDIA Corporation/
+
+# Claude Code 로컬 설정
+.claude/
