@@ -106,6 +106,9 @@
   .catrow .n { font-size: 14px; color: var(--muted); text-align: right; min-width: 52px; }
   .catrow .bar { height: 6px; margin-top: 6px; }
 
+  h3.course { margin: 24px 0 10px; font-size: 19px; }
+  h3.course small { display: block; font-size: 14px; font-weight: normal; color: var(--muted); margin-top: 2px; }
+
   /* 문장 줄 */
   .slist { display: grid; gap: 8px; }
   .srow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; text-align: left; width: 100%;
@@ -288,6 +291,7 @@
 </nav>
 <script src="data.js"></script>
 <script src="sentences.js"></script>
+<script src="sentences-2.js"></script>
 <script>
 'use strict';
 // ---------- 기본 도구 ----------
@@ -585,7 +589,7 @@ VIEWS.home = () => {
     ${ddayHTML()}
     ${nothing
       ? `<button class="primary big sub" data-act="study" data-arg="more">새 문장 5개 더 배우기<small>오늘 할 분량은 다 했어요 🎉</small></button>`
-      : `<button class="primary big" data-act="study">오늘의 문장 학습<small>복습 ${due.length}개 · 새 문장 ${fresh.length}개</small></button>`}
+      : `<button class="primary big" data-act="study">오늘의 문장 학습<small>복습 ${due.length}개 · 새 문장 ${fresh.length}개${fresh.length ? ` · ${CAT_INFO[fresh[0].cat].e} ${CAT_INFO[fresh[0].cat].name}` : ''}</small></button>`}
     <div class="stats">
       <div class="stat"><b>🔥 ${streak()}일</b><span>연속 학습</span></div>
       <div class="stat"><b>${learned}<span style="font-size:15px"> / ${all.length}</span></b><span>배운 문장 (외움 ${mastered})</span></div>
@@ -596,11 +600,15 @@ VIEWS.home = () => {
       <button data-act="myadd"><b>📝</b><span>내 문장 추가<small>수업에서 배운 것</small></span></button>
       <button data-act="cat" data-arg="fav"><b>⭐</b><span>즐겨찾기<small>${favs.length}개</small></span></button>
     </div>
-    <section class="card"><h3>상황별 진도</h3>
-      ${CATEGORIES.map(c => { const l = catSents(c.id), n = l.filter(s => srs[s.id]).length;
-        return `<div class="prog" data-act="cat" data-arg="${c.id}"><div><span>${c.e} ${c.name}</span><span class="muted">${n} / ${l.length}</span></div><div class="bar"><i style="width:${pct(n, l.length)}%"></i></div></div>`; }).join('')}
+    <section class="card"><h3>코스 진도</h3>
+      ${COURSES.map(co => {
+        if (co.soon) return `<div class="prog muted"><div><span>${co.id}단계 · ${co.name}</span><span>준비 중</span></div><div class="bar"></div></div>`;
+        const l = courseSents(co.id), n = l.filter(s => srs[s.id]).length;
+        return `<div class="prog" data-act="tab" data-arg="sentences"><div><span>${co.id}단계 · ${co.name}</span><span class="muted">${n} / ${l.length}</span></div><div class="bar"><i style="width:${pct(n, l.length)}%"></i></div></div>`; }).join('')}
+      <p class="note">하루 ${settings.newPerDay}개씩이면 남은 ${allSents().filter(s => !srs[s.id]).length}문장을 약 ${Math.ceil(allSents().filter(s => !srs[s.id]).length / settings.newPerDay)}일 동안 배워요.</p>
     </section>`;
 };
+const courseSents = id => BUILTIN.filter(s => CAT_INFO[s.cat].course === id);
 
 const catRow = (c, list) => {
   const n = list.filter(s => srs[s.id]).length;
@@ -614,8 +622,14 @@ VIEWS.sentences = () => `
   <div class="cats" style="margin-top:12px">
     ${catRow(CAT_INFO.fav, catSents('fav'))}
     ${MYS.length ? catRow(CAT_INFO.my, MYS) : ''}
-    ${CATEGORIES.map(c => catRow(c, catSents(c.id))).join('')}
   </div>
+  ${COURSES.map(co => {
+    const cats = CATEGORIES.filter(c => c.course === co.id);
+    if (co.soon || !cats.length) return `<h3 class="course muted">${co.id}단계 · ${co.name}<small>준비 중 · ${co.desc}</small></h3>`;
+    const l = courseSents(co.id), n = l.filter(s => srs[s.id]).length;
+    return `<h3 class="course">${co.id}단계 · ${co.name}<small>${co.desc} · ${n} / ${l.length}</small></h3>
+      <div class="cats">${cats.map(c => catRow(c, catSents(c.id))).join('')}</div>`;
+  }).join('')}
   <div class="legend" style="margin-top:12px"><span><i style="background:var(--mid)"></i>배우는 중</span><span><i style="background:var(--ok)"></i>외움</span></div>`;
 
 const sRow = s => `<button class="srow" data-act="ss" data-arg="${a(s.id)}">

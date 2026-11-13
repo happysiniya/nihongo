@@ -17,12 +17,22 @@
 | 파일 | 역할 |
 |---|---|
 | `index.html` | 화면 전부 (HTML, CSS, JS 한 파일) |
-| `sentences.js` | `CATEGORIES`: 상황별 문장 117개 (수업, 인사, 자기소개, 핵심 문형, 공항, 호텔, 식당, 카페·편의점, 교통, 쇼핑, 긴급) |
+| `sentences.js` | `COURSES`(코스 목록)와 1단계 '여행 생존' 117문장: 수업, 인사, 자기소개, 핵심 문형, 공항, 호텔, 식당, 카페·편의점, 교통, 쇼핑, 긴급 |
+| `sentences-2.js` | 2단계 '여행 심화' 154문장 (`CATEGORIES.push`): 숫자·가격·시간, 온천·료칸, 관광, 이자카야, 음식 주문 심화, 날씨·잡담, 교통 심화, 쇼핑 심화, 부탁·도움, 숙소 요청, 맞장구 |
 | `data.js` | 글자 데이터: `KANA_ROWS`, 단계 `*_UNITS`, `KANA_TIPS`, `CONFUSE`, 가타카나 단어 `WORDS` |
 | `manifest.json`, `sw.js` | PWA. 화면은 네트워크 우선, Google Fonts는 캐시 우선 (일본 현지 오프라인용) |
 | `icon-192.png`, `icon-512.png` | 앱 아이콘 (붉은 배경, 흰 원 안에 あ). Edge headless로 HTML을 찍어서 만들었어요 |
 
-### 문장 데이터 쓰는 법 (`sentences.js`)
+### 코스(단계)
+- 문장을 오래 공부할 수 있게 코스로 나눠요. 코스 하나에 파일 하나를 둬요 (`sentences-N.js`, `CATEGORIES.push`).
+  - 각 상황에는 `course` 번호가 있어요.
+  - 새 파일을 만들면 `index.html`의 `<script>`와 `sw.js`의 `SHELL_FILES`에도 넣어요.
+- 새 문장은 **내 문장 → 1단계 → 2단계…** 순서로 나와요. 상황 화면의 '카드 학습'을 누르면 그 상황부터 배울 수도 있어요.
+- `COURSES`에서 `soon: true`인 코스는 '준비 중'으로 보여요.
+  - 3단계 '일상 회화'(가족, 일, 주말, 취미, 감정. 전화 수업 주제)를 다음에 만들어요.
+  - 4단계 '문법 코스'(N5~N4 문형)도 준비 중이에요.
+
+### 문장 데이터 쓰는 법 (`sentences*.js`)
 - `[일본어, 한국어, 도움말, [[상대방 말, 뜻], ...]]`
 - 한자 뒤에 `{읽기}`를 붙여요. 화면에서 후리가나(ruby)로 보여요. 예: `駅{えき}`
   - 한자에 읽기가 빠지면 안 돼요. 아래 '확인' 단계의 검사로 찾을 수 있어요.
@@ -32,7 +42,12 @@
   - 같은 문장이 두 번 들어가면 안 돼요.
 
 ## 화면 (아래 탭: 홈 / 문장 / 내 문장 / 글자 / 설정)
-- **홈:** 여행 D-day, **오늘의 문장 학습**(복습 n개 · 새 문장 n개), 연속 학습일, 바로가기, 상황별 진도.
+- **홈:**
+  - 여행 D-day
+  - **오늘의 문장 학습**: 복습 n개 · 새 문장 n개 · 다음에 배울 상황
+  - 연속 학습일, 바로가기
+  - 코스 진도와 남은 일수
+- **문장 탭:** 즐겨찾기, 내 문장, 그리고 코스별로 묶은 상황 목록.
 - **문장 카드 (간격 반복):**
   - 새 문장은 먼저 전체를 보여 줘요. "확인했어요"를 누르면 3장 뒤에 다시 나와서 시험해요.
   - 시험 카드의 앞면은 설정 `cardDir`에 따라 정해져요: `ko` 한국어 보고 말하기 / `jp` 일본어 듣고 뜻 떠올리기 / `mix`.
@@ -74,27 +89,29 @@
 | `nh-unit` | 글자 단계 |
 
 ## 고칠 때 순서
-1. 코드를 고친 뒤 `sw.js` 맨 위 `VERSION`을 하나 올려요 (현재 **v2**). 새 파일이 생기면 `SHELL_FILES`에도 넣어요.
+1. 코드를 고친 뒤 `sw.js` 맨 위 `VERSION`을 하나 올려요 (현재 **v3**). 새 파일이 생기면 `SHELL_FILES`에도 넣어요.
 2. 확인해요.
    - 문법 검사:
      ```
-     node -e "const fs=require('fs');const h=fs.readFileSync('index.html','utf8');new Function(fs.readFileSync('data.js','utf8')+fs.readFileSync('sentences.js','utf8')+h.match(/<script>([\s\S]*?)<\/script>/)[1]);console.log('ok')"
+     node -e "const fs=require('fs');const h=fs.readFileSync('index.html','utf8');new Function(['data.js','sentences.js','sentences-2.js'].map(f=>fs.readFileSync(f,'utf8')).join(';')+h.match(/<script>([\s\S]*?)<\/script>/)[1]);console.log('ok')"
      ```
    - 문장 데이터 검사: 후리가나가 빠진 한자가 있는지, 같은 문장이 두 번 들어갔는지 확인해요.
      - 방법: `{읽기}`가 붙은 한자를 지운 뒤에도 한자가 남아 있으면 읽기가 빠진 거예요.
-   - 화면 확인: Edge headless로 스크린샷을 찍어요.
-     - Edge headless의 창 너비는 최소 500px이에요. `--window-size=500,1000`을 써요.
-     - 주소 해시로 화면을 바로 열 수 있어요. `index.html` 맨 아래 주석에 목록이 있어요.
+   - 화면과 흐름 확인: **Playwright(Python) + 설치된 Chrome**을 써요.
+     - `p.chromium.launch(channel='chrome')`로 띄워요. 내장 Chromium은 설치하지 않았어요.
+     1. `python -m http.server 8765`로 폴더를 띄워요.
+     2. `page.goto('http://127.0.0.1:8765/index.html')`로 열어요.
+     3. `page.evaluate("go({ v: 'sentences' })")`나 `ACT.study()`처럼 앱 함수로 화면을 옮기거나 동작을 실행해요.
+        - 같은 주소에서 해시만 바꾸는 `goto`는 페이지를 다시 열지 않아요.
+     4. `page.on('pageerror')`로 오류를 모아요.
+     - 휴대폰 크기는 `viewport={'width': 412, 'height': 900}`이에요.
+     - 예전에는 Edge headless를 썼지만, 백그라운드 Edge 프로세스가 쌓이면 빈 화면만 나와서 쓰지 않아요.
+     - 주소 해시로 첫 화면을 고를 수 있어요. 목록은 `index.html` 맨 아래 주석에 있어요.
        - 예: `#study` `#cat=food` `#ss=お会計をお願いします` `#orderquiz` `#listenquiz` `#myedit` `#chart`
-     - Edge가 가끔 멈춰요. 한 번에 한 장씩 `timeout 40`을 붙이고, 매번 다른 `--user-data-dir`(스크래치패드 안)을 줘요.
-   - 흐름 확인:
-     1. `index.html`을 스크래치패드에 복사해요.
-     2. `</body>` 앞에 `ACT.study()` 같은 동작을 차례로 부르는 테스트 `<script>`를 넣어요.
-     3. `--dump-dom`으로 결과를 확인해요.
-     - `awk sub()`로 넣으면 `&`가 깨져요. `head`와 `tail`로 붙여요.
 3. 커밋해요. 커밋 메시지는 한국어 제목 한 줄 + Markdown 설명(바뀐 점, 바뀐 파일)으로 써요. **push는 사용자가 하라고 할 때만** 해요.
 
 ## 다음에 할 일 후보
+- 3단계 '일상 회화' 문장 (전화 수업 주제를 물어보고 맞추기), 4단계 '문법 코스'
 - 숫자·가격·시간 듣기 퀴즈 (せんにひゃくえん → 1,200엔)
 - 상황극 대화: 점원 말 → 내 대답 고르기, 여러 턴 이어서
 - AI 회화 연습, 메뉴판 사진 해석 (API 키가 필요해서 서버 없이 하기 어려워요)
