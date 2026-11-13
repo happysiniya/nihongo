@@ -11,8 +11,8 @@
 const COURSES = [
   { id: 1, name: '여행 생존', desc: '여행에서 꼭 필요한 기본 문장' },
   { id: 2, name: '여행 심화', desc: '숫자, 온천, 관광, 술집, 가벼운 대화' },
-  { id: 3, name: '일상 회화', desc: '가족, 일, 주말, 취미 — 수업 주제와 함께', soon: true },
-  { id: 4, name: '문법 코스', desc: 'N5~N4 문형을 하나씩', soon: true },
+  { id: 3, name: '일상 회화', desc: '가족, 일, 취미, 감정 — 수업에서 나올 만한 주제' },
+  { id: 4, name: '문법 코스', desc: 'N5~N4 문형을 하나씩, 【】에 문법 설명' },
 ];
 
 const CATEGORIES = [
