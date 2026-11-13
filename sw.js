@@ -1,9 +1,9 @@
 // 앱 화면과 글꼴을 휴대폰에 저장해 두어서 인터넷이 없어도 (비행기, 일본 현지) 열려요.
 // 파일을 고쳐서 다시 올릴 때는 아래 버전 숫자를 하나 올려 주세요.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = 'shell-' + VERSION;
 const FONTS = 'fonts-v1';
-const SHELL_FILES = ['./', 'index.html', 'data.js', 'manifest.json', 'icon-192.png', 'icon-512.png'];
+const SHELL_FILES = ['./', 'index.html', 'data.js', 'sentences.js', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(SHELL).then(c => c.addAll(SHELL_FILES)).then(() => self.skipWaiting()));

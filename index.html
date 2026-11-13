@@ -16,14 +16,14 @@
   :root {
     --bg: #f7f3ec; --card: #fffdf9; --ink: #2b2a33; --muted: #7b7685; --line: #e8e1d5; --soft: #f1ebe1;
     --accent: #d9482b; --accent-soft: #fbe7e1; --indigo: #34437a;
-    --ok: #23885a; --ok-bg: #dff3e8; --bad: #cf3e3e; --bad-bg: #fbe4e4; --mid: #e2a400;
+    --ok: #23885a; --ok-bg: #dff3e8; --bad: #cf3e3e; --bad-bg: #fbe4e4; --mid: #e2a400; --mid-bg: #fdf3d6;
     --guide: #e3dccf; --shadow: 0 1px 2px rgba(40,30,20,.06), 0 6px 18px rgba(40,30,20,.07);
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #1b1a20; --card: #25242c; --ink: #ecebf0; --muted: #a29eac; --line: #393743; --soft: #2f2e37;
       --accent: #ef6a4c; --accent-soft: #3d2620; --indigo: #a8b6ef;
-      --ok: #5fd39a; --ok-bg: #1d3a2c; --bad: #ff7d7d; --bad-bg: #452426; --mid: #f0c040;
+      --ok: #5fd39a; --ok-bg: #1d3a2c; --bad: #ff7d7d; --bad-bg: #452426; --mid: #f0c040; --mid-bg: #3d3420;
       --guide: #3b3944; --shadow: none;
     }
   }
@@ -32,8 +32,10 @@
   body { margin: 0; background: var(--bg); color: var(--ink); font-size: 17px; line-height: 1.5;
     font-family: "Gowun Dodum", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; overscroll-behavior-y: contain; }
   button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
-  input, select { font: inherit; color: inherit; }
+  input, select, textarea { font: inherit; color: inherit; }
   .jp { font-family: "Klee One", "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif; font-weight: 600; }
+  rt { font-size: .48em; color: var(--muted); font-weight: 400; }
+  body.nofuri rt { display: none; }
   h2 { font-size: 24px; margin: 6px 0 4px; }
   h3 { font-size: 18px; margin: 0 0 10px; }
   h4 { font-size: 15px; margin: 14px 0 8px; color: var(--muted); font-weight: normal; }
@@ -57,17 +59,21 @@
 
   /* 버튼 */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--line);
-    background: var(--card); border-radius: 14px; padding: 12px 16px; font-size: 17px; min-height: 48px; }
-  .btn:active, .primary:active, .opt:active, .cell:active { transform: scale(.97); }
+    background: var(--card); border-radius: 14px; padding: 12px 14px; font-size: 16px; min-height: 48px; }
+  .btn:active, .primary:active, .opt:active, .cell:active, .chunk:active, .srow:active { transform: scale(.97); }
+  .btn.on { background: var(--mid-bg); border-color: var(--mid); }
   .primary { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; border: 0;
     background: var(--accent); color: #fff; border-radius: 18px; padding: 16px; font-size: 20px; font-weight: bold; min-height: 56px; }
-  .primary small { font-size: 14px; font-weight: normal; opacity: .9; margin-top: 2px; }
+  .primary small { font-size: 14px; font-weight: normal; opacity: .92; margin-top: 2px; }
   .primary.big { padding: 22px 16px; font-size: 23px; margin: 14px 0 4px; }
+  .primary.sub { background: var(--indigo); }
+  @media (prefers-color-scheme: dark) { .primary.sub { color: var(--bg); } }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
   .row > .btn { flex: 1; }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; }
   .chip { border: 1px solid var(--line); background: var(--soft); border-radius: 999px; padding: 8px 14px; font-size: 16px; }
   .chip.on { background: var(--indigo); border-color: var(--indigo); color: var(--card); }
+  .back { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: var(--muted); padding: 6px 0; font-size: 16px; }
 
   /* 홈 */
   .dday { background: linear-gradient(135deg, var(--accent), #e9784f); color: #fff; border-radius: 20px; padding: 18px 20px;
@@ -83,9 +89,36 @@
   .prog div { display: flex; justify-content: space-between; font-size: 15px; }
   .bar { height: 10px; background: var(--soft); border-radius: 99px; overflow: hidden; margin-top: 4px; }
   .bar i { display: block; height: 100%; background: var(--ok); border-radius: 99px; }
-  .shortcuts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .shortcuts button { border: 1px solid var(--line); background: var(--card); border-radius: 16px; padding: 14px 6px; font-size: 14px; line-height: 1.3; }
-  .shortcuts b { display: block; font-size: 26px; font-weight: normal; margin-bottom: 4px; }
+  .shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .shortcuts button { display: flex; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--line);
+    background: var(--card); border-radius: 16px; padding: 14px 12px; font-size: 15px; line-height: 1.3; }
+  .shortcuts b { font-size: 26px; font-weight: normal; }
+  .shortcuts small { display: block; color: var(--muted); font-size: 13px; }
+  .done-today { text-align: center; color: var(--ok); margin: 6px 0 0; }
+
+  /* 상황 목록 */
+  .cats { display: grid; gap: 8px; }
+  .catrow { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; text-align: left;
+    border: 1px solid var(--line); background: var(--card); border-radius: 16px; padding: 12px; }
+  .catrow .e { font-size: 30px; text-align: center; }
+  .catrow b { display: block; font-size: 17px; }
+  .catrow small { color: var(--muted); font-size: 13px; }
+  .catrow .n { font-size: 14px; color: var(--muted); text-align: right; min-width: 52px; }
+  .catrow .bar { height: 6px; margin-top: 6px; }
+
+  /* 문장 줄 */
+  .slist { display: grid; gap: 8px; }
+  .srow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; text-align: left; width: 100%;
+    border: 1px solid var(--line); background: var(--card); border-radius: 14px; padding: 10px 12px; }
+  .srow .jp { display: block; font-size: 21px; line-height: 1.9; }
+  .srow small { display: block; color: var(--muted); font-size: 14px; line-height: 1.4; }
+  .srow .mk { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--line); vertical-align: 1px; }
+  .dot.l1 { background: var(--mid); }
+  .dot.l2 { background: var(--ok); }
+  .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .actions .btn { flex-direction: column; gap: 2px; font-size: 14px; padding: 10px 4px; }
+  .actions .btn b { font-size: 22px; font-weight: normal; }
 
   /* 문자표 */
   .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); border-radius: 14px; padding: 4px; margin: 8px 0 4px; }
@@ -100,15 +133,15 @@
   .cell.empty { border: 0; background: none; }
   .cell.lv1::after, .cell.lv2::after { content: ""; position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--mid); }
   .cell.lv2::after { background: var(--ok); }
-  .legend { display: flex; gap: 14px; font-size: 13px; color: var(--muted); margin: 8px 0; }
+  .legend { display: flex; gap: 14px; font-size: 13px; color: var(--muted); margin: 8px 0; flex-wrap: wrap; }
   .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
 
-  /* 글자 상세 */
+  /* 아래에서 올라오는 상세 */
   #sheet { position: fixed; inset: 0; z-index: 10; display: none; }
   #sheet.open { display: block; }
   .sheet-bg { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
-  .sheet-card { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; background: var(--card);
-    border-radius: 24px 24px 0 0; padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); text-align: center; animation: up .2s ease-out; }
+  .sheet-card { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; max-height: 92vh; overflow-y: auto; margin: 0 auto;
+    background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); text-align: center; animation: up .2s ease-out; }
   @keyframes up { from { transform: translateY(40px); opacity: 0; } }
   .xbtn { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--soft); font-size: 20px; }
   .sk { font-size: 110px; line-height: 1.15; cursor: pointer; }
@@ -117,6 +150,29 @@
   .tip { background: var(--soft); border-radius: 12px; padding: 10px 12px; font-size: 15px; margin: 12px 0; text-align: left; }
   .pairline { color: var(--muted); font-size: 15px; margin: 6px 0 14px; }
   .pairline .jp { font-size: 22px; color: var(--ink); margin-left: 4px; }
+  .sjp { font-size: 28px; line-height: 2.1; margin: 22px 0 0; cursor: pointer; word-break: keep-all; overflow-wrap: anywhere; }
+  .skana { color: var(--muted); font-size: 16px; }
+  .sko { font-size: 19px; margin: 4px 0 0; }
+  .others { text-align: left; margin: 12px 0; }
+  .others h5 { margin: 0 0 6px; font-size: 14px; color: var(--muted); font-weight: normal; }
+  .other { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--soft); border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; }
+  .other .jp { font-size: 18px; line-height: 1.9; }
+  .other small { display: block; color: var(--muted); font-size: 14px; }
+  .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+  .tools .btn { flex-direction: column; gap: 0; font-size: 13px; padding: 8px 2px; min-height: 60px; }
+  .tools .btn b { font-size: 22px; font-weight: normal; }
+  #srres:empty { display: none; }
+  #srres { background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-top: 10px; font-size: 15px; text-align: left; }
+  #srres .jp { font-size: 18px; }
+
+  /* 크게 보여주기 */
+  #big { position: fixed; inset: 0; z-index: 20; display: none; background: #fff; color: #111; padding: 24px;
+    flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #big.open { display: flex; }
+  #big .jp { font-size: clamp(30px, 8.5vw, 64px); line-height: 2; word-break: keep-all; overflow-wrap: anywhere; }
+  #big rt { color: #777; }
+  #big p { color: #666; font-size: 18px; }
+  #big small { position: absolute; bottom: calc(20px + env(safe-area-inset-bottom)); color: #999; }
 
   /* 퀴즈 */
   .qtop { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
@@ -129,12 +185,15 @@
   .listen { display: block; margin: 26px auto 14px; width: 130px; height: 130px; border-radius: 50%; border: 0;
     background: var(--accent-soft); font-size: 56px; }
   .hint { text-align: center; color: var(--muted); margin: 0 0 14px; }
+  .hint .jp { color: var(--ink); font-size: 22px; line-height: 2; }
   .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opts.wide { grid-template-columns: 1fr; }
   .opt { border: 2px solid var(--line); background: var(--card); border-radius: 16px; padding: 14px 8px; font-size: 26px; min-height: 76px; font-weight: bold; }
   .opt small { display: block; font-size: 14px; color: var(--muted); font-weight: normal; }
   .opt .jp { font-size: 40px; }
   .opt.wordopt { font-size: 18px; }
   .opt.wordopt b { display: block; font-size: 30px; font-weight: normal; }
+  .opts.wide .opt { font-size: 18px; min-height: 56px; padding: 12px; text-align: left; font-weight: normal; }
   .opt.ok { border-color: var(--ok); background: var(--ok-bg); }
   .opt.bad { border-color: var(--bad); background: var(--bad-bg); }
   .opt.dim { opacity: .45; }
@@ -147,6 +206,29 @@
   .wrongs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
   .wrongs button { border: 1px solid var(--bad); background: var(--bad-bg); border-radius: 12px; padding: 4px 12px; font-size: 26px; }
   .stack { display: grid; gap: 10px; margin-top: 18px; }
+
+  /* 문장 카드 */
+  .face { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px 18px; margin-top: 10px;
+    min-height: 300px; display: flex; flex-direction: column; justify-content: center; text-align: center; box-shadow: var(--shadow); }
+  .face .ko-front { font-size: 26px; font-weight: bold; line-height: 1.4; }
+  .face .ask { color: var(--muted); font-size: 15px; margin-top: 14px; }
+  .face .sjp { margin-top: 6px; }
+  .badge { display: inline-block; align-self: center; background: var(--mid-bg); color: var(--ink); border-radius: 99px; padding: 2px 12px; font-size: 13px; margin-bottom: 8px; }
+  .grades { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .grades button { border: 0; border-radius: 16px; padding: 12px 4px; font-size: 17px; font-weight: bold; min-height: 64px; }
+  .grades small { display: block; font-size: 12px; font-weight: normal; opacity: .85; }
+  .g0 { background: var(--bad-bg); color: var(--bad); }
+  .g1 { background: var(--mid-bg); color: var(--ink); }
+  .g2 { background: var(--ok-bg); color: var(--ok); }
+
+  /* 문장 조립 */
+  .oko { text-align: center; font-size: 22px; font-weight: bold; margin: 18px 0 6px; }
+  .oans { min-height: 76px; border: 2px dashed var(--line); border-radius: 16px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; margin: 12px 0; }
+  .oans.ok { border-color: var(--ok); background: var(--ok-bg); border-style: solid; }
+  .oans.bad { border-color: var(--bad); background: var(--bad-bg); border-style: solid; }
+  .opool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chunk { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 4px 12px; font-size: 21px; line-height: 1.9; box-shadow: var(--shadow); }
+  .chunk.used { visibility: hidden; }
 
   /* 새 글자 소개 */
   .intro { text-align: center; }
@@ -178,29 +260,34 @@
   .rule { display: grid; grid-template-columns: 64px 1fr; gap: 6px 10px; align-items: baseline; margin-top: 12px; font-size: 15px; }
   .rule .jp { font-size: 26px; text-align: center; color: var(--accent); }
 
-  /* 설정 */
+  /* 입력 */
   label.field { display: block; margin: 12px 0; }
   label.field span { display: block; font-size: 15px; color: var(--muted); margin-bottom: 4px; }
-  label.field input[type=text], label.field input[type=date] { width: 100%; padding: 12px; border: 1px solid var(--line);
+  label.field input[type=text], label.field input[type=date], label.field textarea { width: 100%; padding: 12px; border: 1px solid var(--line);
     border-radius: 12px; background: var(--bg); font-size: 17px; }
+  label.field textarea { min-height: 70px; resize: vertical; }
+  label.field .jp { font-size: 20px; }
   label.check { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
   label.check input { width: 22px; height: 22px; accent-color: var(--accent); }
   input[type=range] { width: 100%; accent-color: var(--accent); }
   .voice { font-size: 15px; padding: 10px 12px; border-radius: 12px; background: var(--soft); margin: 8px 0; }
   .voice.warn { background: var(--bad-bg); }
+  .empty-box { text-align: center; color: var(--muted); padding: 30px 10px; border: 1px dashed var(--line); border-radius: 16px; margin: 12px 0; }
 </style>
 </head>
 <body>
 <main id="view"></main>
 <div id="sheet"></div>
+<div id="big" data-act="back"></div>
 <nav class="tabs">
   <button data-act="tab" data-arg="home"><b>🏠</b>홈</button>
-  <button data-act="tab" data-arg="chart"><b>あ</b>문자표</button>
-  <button data-act="tab" data-arg="quizsetup"><b>✏️</b>퀴즈</button>
-  <button data-act="tab" data-arg="words"><b>🍜</b>메뉴 읽기</button>
+  <button data-act="tab" data-arg="sentences"><b>💬</b>문장</button>
+  <button data-act="tab" data-arg="my"><b>📝</b>내 문장</button>
+  <button data-act="tab" data-arg="chart"><b>あ</b>글자</button>
   <button data-act="tab" data-arg="settings"><b>⚙️</b>설정</button>
 </nav>
 <script src="data.js"></script>
+<script src="sentences.js"></script>
 <script>
 'use strict';
 // ---------- 기본 도구 ----------
@@ -211,22 +298,30 @@ const LS = {
 };
 const dayStr = d => d.toLocaleDateString('sv-SE'); // yyyy-mm-dd (기기 시간 기준)
 const today = () => dayStr(new Date());
+const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return dayStr(d); };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const toKata = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+const toHira = s => s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
 
 // ---------- 저장된 값 (localStorage 키는 바꾸지 마세요: 학습 기록이 사라져요) ----------
 const settings = Object.assign(
-  { place: '', trip: '', label: 'ko', chartHint: true, rate: 0.8, chartScript: 'hira',
-    quiz: { scripts: ['hira'], groups: ['basic'], mode: 'read', n: 10 } },
+  { place: '', trip: '', label: 'ko', chartHint: true, rate: 0.8, chartScript: 'kata',
+    furi: true, newPerDay: 5, cardDir: 'ko',
+    quiz: { scripts: ['kata'], groups: ['basic'], mode: 'read', n: 10 } },
   LS.get('nh-settings', {}));
 const saveSettings = () => LS.set('nh-settings', settings);
 const stats = LS.get('nh-stats', {});   // 글자별 { c 맞힘, w 틀림, s 연속 맞힘, t 마지막 시각 }
-const wstats = LS.get('nh-wstats', {}); // 단어별 같은 형식
+const wstats = LS.get('nh-wstats', {}); // 가타카나 단어별 같은 형식
+const srs = LS.get('nh-srs', {});       // 문장별 { lv 단계, due 다음 복습일, c 맞힘, w 틀림 }
+let my = LS.get('nh-my', []);           // 내 문장 [{ id, jp, kana, ko, note, at }]
+let favs = LS.get('nh-fav', []);        // 즐겨찾기 문장 id
+let newDay = LS.get('nh-newday', { d: '', n: 0 }); // 오늘 새로 배운 문장 수
 let days = LS.get('nh-days', []);       // 공부한 날짜들
-let unitIdx = LS.get('nh-unit', 0);     // 오늘의 학습 진도
+let unitIdx = LS.get('nh-unit', 0);     // 글자 단계 학습 진도
 
-// ---------- 글자 데이터 만들기 ----------
+// ---------- 글자 데이터 ----------
 const SCRIPT_NAME = { hira: '히라가나', kata: '가타카나' };
 const GROUP_NAME = { basic: '기본', daku: '탁음·반탁음', yoon: '요음' };
 const ROWS = [], KANA = [], BY = {};
@@ -253,10 +348,51 @@ const addUnits = (script, defs) => defs.forEach(ids => {
 addUnits('hira', BASIC_UNITS); addUnits('kata', BASIC_UNITS);
 addUnits('hira', DAKU_UNITS);  addUnits('kata', DAKU_UNITS);
 addUnits('hira', YOON_UNITS);  addUnits('kata', YOON_UNITS);
+const KATA_START = BASIC_UNITS.length;
 const CONF = {};
 for (const g of CONFUSE) for (const k of g) CONF[k] = [...new Set([...(CONF[k] || []), ...g.filter(x => x !== k)])];
 const WBY = {};
 for (const [k, h, ko, e] of WORDS) WBY[k] = { k, h, ko, e };
+
+// ---------- 문장 데이터 ----------
+// 한자{읽기} → 후리가나, '/' → 문장 조립 조각
+const KANJI = /([々〆ヶ一-鿿]+)\{([^}]+)\}/g;
+const rubyHTML = m => esc(m).replace(KANJI, '<ruby>$1<rt>$2</rt></ruby>');
+const SENT = {}, BUILTIN = [];
+function mkSent(cat, markup, ko, note, others) {
+  const plain = markup.replace(KANJI, '$1').replace(/\//g, '');
+  const parts = markup.split('/');
+  return { id: plain, cat, plain, ko, note: note || '', kana: '',
+    html: rubyHTML(markup.replace(/\//g, '')),
+    chunks: parts.length >= 3 ? parts.map(c => ({ html: rubyHTML(c), plain: c.replace(KANJI, '$1') })) : null,
+    others: (others || []).map(([m, k]) => ({ html: rubyHTML(m.replace(/\//g, '')), plain: m.replace(KANJI, '$1').replace(/\//g, ''), ko: k })) };
+}
+for (const c of CATEGORIES) for (const [m, ko, note, others] of c.list) {
+  const s = mkSent(c.id, m, ko, note, others);
+  SENT[s.id] = s; BUILTIN.push(s);
+}
+let MYS = [];
+function buildMy() {
+  for (const s of MYS) delete SENT[s.id];
+  MYS = my.map(e => {
+    const parts = e.jp.trim().split(/\s+/);
+    const s = { id: e.id, cat: 'my', my: true, plain: e.jp.replace(/\s+/g, ''), kana: e.kana || '', ko: e.ko, note: e.note || '',
+      html: esc(e.jp.replace(/\s+/g, '')), others: [],
+      chunks: parts.length >= 3 ? parts.map(p => ({ html: esc(p), plain: p })) : null };
+    SENT[s.id] = s;
+    return s;
+  });
+}
+buildMy();
+const allSents = () => [...MYS, ...BUILTIN];
+const CAT_INFO = { my: { id: 'my', e: '📝', name: '내 문장', desc: '수업에서 배운 문장' }, fav: { id: 'fav', e: '⭐', name: '즐겨찾기', desc: '여행 가서 바로 꺼내 볼 문장' } };
+for (const c of CATEGORIES) CAT_INFO[c.id] = c;
+function catSents(id) {
+  if (id === 'my') return MYS;
+  if (id === 'fav') return favs.map(f => SENT[f]).filter(Boolean);
+  if (id === 'learned') return allSents().filter(s => srs[s.id]);
+  return BUILTIN.filter(s => s.cat === id);
+}
 
 // ---------- 학습 기록 ----------
 function markDay() {
@@ -270,8 +406,8 @@ function record(store, key, k, ok) {
   LS.set(key, store);
   markDay();
 }
-const level = (k, store = stats) => { const s = store[k]; return !s ? 0 : s.s >= 3 ? 2 : 1; }; // 0 처음, 1 연습 중, 2 외움
-const weight = s => !s ? 3 : (s.s >= 3 ? 1 : 3) + Math.min(s.w, 4) * 0.5; // 약한 글자일수록 자주
+const level = (k, store = stats) => { const s = store[k]; return !s ? 0 : s.s >= 3 ? 2 : 1; };
+const weight = s => !s ? 3 : (s.s >= 3 ? 1 : 3) + Math.min(s.w, 4) * 0.5;
 function pickWeighted(pool, n, store = stats) {
   const items = pool.map(k => ({ k, w: weight(store[k]) })), out = [];
   while (out.length < n && items.length) {
@@ -281,7 +417,7 @@ function pickWeighted(pool, n, store = stats) {
   }
   return out;
 }
-function pickMany(pool, n, store) { // 문제 수가 글자 수보다 많으면 여러 번 돌려요
+function pickMany(pool, n, store) {
   let out = [];
   while (out.length < n) {
     let next = pickWeighted(pool, Math.min(n - out.length, pool.length), store);
@@ -298,7 +434,32 @@ function streak() {
   return n;
 }
 
-// ---------- 소리 (안드로이드 Chrome의 일본어 음성) ----------
+// 문장 간격 반복: 단계(lv)가 오를수록 다음 복습까지 오래 걸려요 (일)
+const INTERVALS = [0, 1, 3, 7, 14, 30, 60, 120];
+const sLevel = id => { const s = srs[id]; return !s ? 0 : s.lv >= 3 ? 2 : 1; }; // 0 처음, 1 배우는 중, 2 외움
+const isDue = id => srs[id] && srs[id].due <= today();
+function grade(id, g) { // 0 다시, 1 애매, 2 알아요
+  const s = srs[id] || (srs[id] = { lv: 0, due: today(), c: 0, w: 0 });
+  if (g === 0) { s.lv = 0; s.w++; s.due = today(); }
+  else if (g === 1) { s.lv = Math.max(1, s.lv); s.c++; s.due = addDays(1); }
+  else { s.lv = Math.min(s.lv + 1, INTERVALS.length - 1); s.c++; s.due = addDays(INTERVALS[s.lv]); }
+  LS.set('nh-srs', srs);
+  markDay();
+}
+function newLeft() { return Math.max(0, settings.newPerDay - (newDay.d === today() ? newDay.n : 0)); }
+function countNew() {
+  if (newDay.d !== today()) newDay = { d: today(), n: 0 };
+  newDay.n++; LS.set('nh-newday', newDay);
+}
+function plan(cat, extraNew) {
+  const pool = cat ? catSents(cat) : allSents();
+  const due = pool.filter(s => isDue(s.id)).sort((a, b) => srs[a.id].due < srs[b.id].due ? -1 : 1).slice(0, 30);
+  const n = extraNew ?? (cat ? 5 : newLeft());
+  const fresh = pool.filter(s => !srs[s.id]).slice(0, n);
+  return { due, fresh };
+}
+
+// ---------- 소리 ----------
 let jaVoice = null;
 const hasTTS = 'speechSynthesis' in window;
 function loadVoices() {
@@ -306,19 +467,66 @@ function loadVoices() {
   jaVoice = vs.find(v => /^ja/i.test(v.lang) && /google/i.test(v.name)) || vs.find(v => /^ja/i.test(v.lang)) || null;
 }
 if (hasTTS) { loadVoices(); speechSynthesis.onvoiceschanged = () => { loadVoices(); if (route.v === 'settings') render(); }; }
-function speak(text) {
-  if (!hasTTS) return;
+function speak(text, slow) {
+  if (!hasTTS || !text) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'ja-JP';
   if (jaVoice) u.voice = jaVoice;
-  u.rate = settings.rate;
+  u.rate = slow ? Math.max(0.4, settings.rate * 0.65) : settings.rate;
   speechSynthesis.speak(u);
+}
+
+// ---------- 따라 말하기 (음성 인식) ----------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+const norm = t => toHira(t).replace(/[\s、。，．,.!?！？「」『』・ー〜~…]/g, '');
+function similar(a, b) {
+  a = norm(a); b = norm(b);
+  if (!a || !b) return 0;
+  const dp = Array(b.length + 1).fill(0);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = 0;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = dp[j];
+      dp[j] = a[i - 1] === b[j - 1] ? prev + 1 : Math.max(dp[j], dp[j - 1]);
+      prev = tmp;
+    }
+  }
+  return 2 * dp[b.length] / (a.length + b.length);
+}
+function recognize(id) {
+  const box = $('#srres'), s = SENT[id];
+  if (!box || !s) return;
+  if (!SR) { box.innerHTML = '이 브라우저는 음성 인식을 지원하지 않아요. Chrome에서 열어 주세요.'; return; }
+  if (rec) { rec.abort(); rec = null; }
+  if (hasTTS) speechSynthesis.cancel();
+  let got = false;
+  rec = new SR();
+  rec.lang = 'ja-JP'; rec.interimResults = false; rec.maxAlternatives = 5;
+  box.innerHTML = '🎤 듣고 있어요… 문장을 말해 보세요';
+  rec.onresult = e => {
+    got = true;
+    const best = [...e.results[0]].map(a => a.transcript)
+      .map(t => ({ t, sc: Math.max(similar(t, s.plain), s.kana ? similar(t, s.kana) : 0) }))
+      .sort((a, b) => b.sc - a.sc)[0];
+    const p = Math.round(best.sc * 100);
+    const msg = p >= 90 ? '🎉 완벽해요!' : p >= 70 ? '👍 좋아요! 거의 맞았어요' : '🙂 한 번 더 들어 보고 말해 볼까요?';
+    box.innerHTML = `<b>${msg}</b> (${p}점)<br>들린 말: <span class="jp">${esc(best.t)}</span>`;
+    markDay();
+  };
+  rec.onerror = e => {
+    got = true;
+    box.innerHTML = e.error === 'not-allowed' ? '마이크 사용을 허용해 주세요. (Chrome 주소창 왼쪽 아이콘 → 권한)'
+      : e.error === 'no-speech' ? '소리가 들리지 않았어요. 다시 눌러 보세요.' : '알아듣지 못했어요. 다시 해 볼까요?';
+  };
+  rec.onend = () => { rec = null; if (!got) box.innerHTML = '소리가 들리지 않았어요. 다시 눌러 보세요.'; };
+  rec.start();
 }
 
 // ---------- 화면 이동 (안드로이드 '뒤로' 버튼 지원) ----------
 let route = history.state && history.state.v ? history.state : { v: 'home' };
-let quiz = null;
+let quiz = null, deck = null;
 function go(r, push = false) {
   const changed = r.v !== route.v;
   route = r;
@@ -326,59 +534,38 @@ function go(r, push = false) {
   render();
   if (changed) window.scrollTo(0, 0);
 }
+const over = extra => go(Object.assign({}, route, extra), true); // 지금 화면 위에 상세 열기
 addEventListener('popstate', e => { route = e.state && e.state.v ? e.state : { v: 'home' }; render(); });
-const TAB_OF = { quiz: 'quizsetup', result: 'quizsetup', intro: 'home', write: 'chart' };
+const TAB_OF = { cat: 'sentences', cards: 'home', order: 'home', quiz: 'home', result: 'home',
+  quizsetup: 'chart', words: 'chart', intro: 'chart', write: 'chart', myedit: 'my' };
+const FOCUS = ['quiz', 'intro', 'write', 'cards', 'order'];
 
 function render() {
-  if ((route.v === 'quiz' || route.v === 'result') && !quiz) route = { v: 'home' };
-  if (route.v === 'intro' && !route.list) route = { v: 'home' };
-  if (route.v === 'write' && !route.list) route = { v: 'chart' };
+  if (rec) { rec.abort(); rec = null; }
+  if ((route.v === 'quiz' || route.v === 'result' || route.v === 'order') && !quiz) route = { v: 'home' };
+  if (route.v === 'cards' && !deck) route = { v: 'home' };
+  if ((route.v === 'intro' || route.v === 'write') && !route.list) route = { v: 'chart' };
+  if (route.v === 'cat' && !CAT_INFO[route.id]) route = { v: 'sentences' };
   const v = VIEWS[route.v] ? route.v : 'home';
   $('#view').innerHTML = VIEWS[v]();
   const tab = TAB_OF[v] || v;
   document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.arg === tab));
-  document.body.classList.toggle('focus', ['quiz', 'intro', 'write'].includes(v));
-  $('#sheet').innerHTML = route.sheet ? sheetHTML(route.sheet) : '';
-  $('#sheet').classList.toggle('open', !!route.sheet);
+  document.body.classList.toggle('focus', FOCUS.includes(v));
+  document.body.classList.toggle('nofuri', !settings.furi);
+  const sheet = route.sheet ? kanaSheet(route.sheet) : route.ss ? sentSheet(route.ss) : '';
+  $('#sheet').innerHTML = sheet;
+  $('#sheet').classList.toggle('open', !!sheet);
+  const big = route.big && SENT[route.big];
+  $('#big').innerHTML = big ? `<div class="jp">${big.html}</div>${big.kana ? `<p>${esc(big.kana)}</p>` : ''}<p>${esc(big.ko)}</p><small>화면을 누르면 닫혀요</small>` : '';
+  $('#big').classList.toggle('open', !!big);
   if (v === 'write') mountWrite();
 }
 
 const lab = o => settings.label === 'ro' ? esc(o.r) : settings.label === 'both' ? `${o.h}<small>${o.r}</small>` : o.h;
-const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+const a = s => esc(s); // data-arg 값
 
 // ---------- 화면들 ----------
 const VIEWS = {};
-
-VIEWS.home = () => {
-  const done = unitIdx >= UNITS.length;
-  const u = UNITS[Math.min(unitIdx, UNITS.length - 1)];
-  const mastered = KANA.filter(o => level(o.k) === 2).length;
-  const progs = [
-    ['히라가나 기본', KANA.filter(o => o.script === 'hira' && o.group === 'basic')],
-    ['가타카나 기본', KANA.filter(o => o.script === 'kata' && o.group === 'basic')],
-    ['탁음·반탁음', KANA.filter(o => o.group === 'daku')],
-    ['요음', KANA.filter(o => o.group === 'yoon')],
-  ].map(([name, list]) => {
-    const m = list.filter(o => level(o.k) === 2).length;
-    return `<div class="prog"><div><span>${name}</span><span class="muted">${m} / ${list.length}</span></div>
-      <div class="bar"><i style="width:${pct(m, list.length)}%"></i></div></div>`;
-  }).join('');
-  return `
-    ${ddayHTML()}
-    <button class="primary big" data-act="today">오늘의 학습 시작
-      <small>${done ? '모든 글자를 배웠어요! 약한 글자 복습' : '지금 배우는 중 · ' + u.label}</small></button>
-    <div class="stats">
-      <div class="stat"><b>🔥 ${streak()}일</b><span>연속 학습</span></div>
-      <div class="stat"><b>${mastered}</b><span>외운 글자 / ${KANA.length}</span></div>
-    </div>
-    <section class="card"><h3>진도</h3>${progs}
-      <p class="note">한 글자를 3번 연속 맞히면 '외운 글자'가 돼요.</p></section>
-    <div class="shortcuts">
-      <button data-act="confquiz"><b>🔀</b>헷갈리는<br>글자</button>
-      <button data-act="tab" data-arg="words"><b>🍜</b>메뉴판<br>읽기</button>
-      <button data-act="writeunit"><b>✍️</b>따라<br>쓰기</button>
-    </div>`;
-};
 
 function ddayHTML() {
   if (!settings.trip) return `<div class="dday empty" data-act="tab" data-arg="settings">✈️ 여행 날짜를 정하면 D-day를 보여 드려요 · <u>정하기</u></div>`;
@@ -389,6 +576,281 @@ function ddayHTML() {
   return `<div class="dday empty" data-act="tab" data-arg="settings">🧳 ${place} 여행은 즐거우셨나요? 다음 여행 날짜를 정해 보세요 · <u>정하기</u></div>`;
 }
 
+VIEWS.home = () => {
+  const { due, fresh } = plan(null);
+  const all = allSents();
+  const learned = all.filter(s => srs[s.id]).length, mastered = all.filter(s => sLevel(s.id) === 2).length;
+  const nothing = !due.length && !fresh.length;
+  return `
+    ${ddayHTML()}
+    ${nothing
+      ? `<button class="primary big sub" data-act="study" data-arg="more">새 문장 5개 더 배우기<small>오늘 할 분량은 다 했어요 🎉</small></button>`
+      : `<button class="primary big" data-act="study">오늘의 문장 학습<small>복습 ${due.length}개 · 새 문장 ${fresh.length}개</small></button>`}
+    <div class="stats">
+      <div class="stat"><b>🔥 ${streak()}일</b><span>연속 학습</span></div>
+      <div class="stat"><b>${learned}<span style="font-size:15px"> / ${all.length}</span></b><span>배운 문장 (외움 ${mastered})</span></div>
+    </div>
+    <div class="shortcuts">
+      <button data-act="listenquiz"><b>🎧</b><span>듣기 퀴즈<small>듣고 뜻 고르기</small></span></button>
+      <button data-act="orderquiz"><b>🧩</b><span>문장 조립<small>순서대로 맞추기</small></span></button>
+      <button data-act="myadd"><b>📝</b><span>내 문장 추가<small>수업에서 배운 것</small></span></button>
+      <button data-act="cat" data-arg="fav"><b>⭐</b><span>즐겨찾기<small>${favs.length}개</small></span></button>
+    </div>
+    <section class="card"><h3>상황별 진도</h3>
+      ${CATEGORIES.map(c => { const l = catSents(c.id), n = l.filter(s => srs[s.id]).length;
+        return `<div class="prog" data-act="cat" data-arg="${c.id}"><div><span>${c.e} ${c.name}</span><span class="muted">${n} / ${l.length}</span></div><div class="bar"><i style="width:${pct(n, l.length)}%"></i></div></div>`; }).join('')}
+    </section>`;
+};
+
+const catRow = (c, list) => {
+  const n = list.filter(s => srs[s.id]).length;
+  return `<button class="catrow" data-act="cat" data-arg="${c.id}"><span class="e">${c.e}</span>
+    <span><b>${c.name}</b><small>${c.desc}</small><div class="bar"><i style="width:${pct(n, list.length)}%"></i></div></span>
+    <span class="n">${n} / ${list.length}</span></button>`;
+};
+VIEWS.sentences = () => `
+  <h2>상황별 문장</h2>
+  <p class="muted">상황을 고르면 문장을 듣고, 카드로 외우고, 퀴즈로 확인할 수 있어요.</p>
+  <div class="cats" style="margin-top:12px">
+    ${catRow(CAT_INFO.fav, catSents('fav'))}
+    ${MYS.length ? catRow(CAT_INFO.my, MYS) : ''}
+    ${CATEGORIES.map(c => catRow(c, catSents(c.id))).join('')}
+  </div>
+  <div class="legend" style="margin-top:12px"><span><i style="background:var(--mid)"></i>배우는 중</span><span><i style="background:var(--ok)"></i>외움</span></div>`;
+
+const sRow = s => `<button class="srow" data-act="ss" data-arg="${a(s.id)}">
+    <span><span class="jp">${s.html}</span>${s.kana ? `<small>${esc(s.kana)}</small>` : ''}<small>${esc(s.ko)}</small></span>
+    <span class="mk">${favs.includes(s.id) ? '⭐ ' : ''}<i class="dot l${sLevel(s.id)}"></i></span></button>`;
+
+VIEWS.cat = () => {
+  const c = CAT_INFO[route.id], list = catSents(route.id);
+  const canOrder = list.filter(s => s.chunks).length >= 1;
+  const empty = route.id === 'fav' ? '문장을 열고 ⭐를 누르면 여기에 모여요.<br>여행 가서 바로 꺼내 쓰기 좋아요.' : '아직 문장이 없어요.';
+  return `
+    <button class="back" data-act="back">◀ 뒤로</button>
+    <h2>${c.e} ${c.name}</h2>
+    <p class="muted">${c.desc}</p>
+    ${list.length ? `
+    <div class="actions">
+      <button class="btn" data-act="study" data-arg="cat:${c.id}"><b>🃏</b>카드 학습</button>
+      <button class="btn" data-act="listenquiz" data-arg="${c.id}" ${list.length < 2 ? 'disabled' : ''}><b>🎧</b>듣기 퀴즈</button>
+      <button class="btn" data-act="orderquiz" data-arg="${c.id}" ${canOrder ? '' : 'disabled'}><b>🧩</b>문장 조립</button>
+    </div>
+    <div class="slist">${list.map(sRow).join('')}</div>` : `<div class="empty-box">${empty}</div>`}`;
+};
+
+function sentSheet(id) {
+  const s = SENT[id];
+  if (!s) return '';
+  const st = srs[id], fav = favs.includes(id);
+  return `<div class="sheet-bg" data-act="back"></div>
+    <div class="sheet-card">
+      <button class="xbtn" data-act="back" aria-label="닫기">✕</button>
+      <div class="qtitle">${CAT_INFO[s.cat].e} ${CAT_INFO[s.cat].name}</div>
+      <div class="sjp jp" data-act="ssay" data-arg="${a(id)}">${s.html}</div>
+      ${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}
+      <div class="sko">${esc(s.ko)}</div>
+      ${s.note ? `<div class="tip">💡 ${esc(s.note)}</div>` : ''}
+      ${othersHTML(s)}
+      <div class="tools">
+        <button class="btn" data-act="ssay" data-arg="${a(id)}"><b>🔊</b>듣기</button>
+        <button class="btn" data-act="sslow" data-arg="${a(id)}"><b>🐢</b>천천히</button>
+        <button class="btn" data-act="rec" data-arg="${a(id)}"><b>🎤</b>따라 말하기</button>
+        <button class="btn ${fav ? 'on' : ''}" data-act="fav" data-arg="${a(id)}"><b>${fav ? '⭐' : '☆'}</b>즐겨찾기</button>
+        <button class="btn" data-act="big" data-arg="${a(id)}"><b>📱</b>크게 보여주기</button>
+        ${s.my ? `<button class="btn" data-act="myedit" data-arg="${a(id)}"><b>✏️</b>고치기</button>`
+          : `<button class="btn" data-act="study" data-arg="one:${a(id)}"><b>🃏</b>카드로 연습</button>`}
+      </div>
+      <div id="srres"></div>
+      <p class="note">${st ? `맞힘 ${st.c}번 · 틀림 ${st.w}번 · 다음 복습 ${st.due <= today() ? '오늘' : st.due.slice(5).replace('-', '월 ') + '일'}` : '아직 카드로 배우지 않은 문장이에요'}</p>
+    </div>`;
+}
+const othersHTML = s => s.others.length ? `<div class="others"><h5>💬 상대방이 하는 말</h5>${s.others.map(o =>
+  `<button class="other" data-act="say" data-arg="${a(o.plain)}"><span class="jp">${o.html}</span><small>${esc(o.ko)}</small></button>`).join('')}</div>` : '';
+
+// --- 문장 카드 ---
+VIEWS.cards = () => {
+  const cur = deck.cur, s = SENT[cur.id], total = deck.done + deck.queue.length + 1;
+  const top = `<div class="qtop"><button class="icon" data-act="back" aria-label="그만하기">✕</button>
+    <div class="bar"><i style="width:${pct(deck.done, total)}%"></i></div><span>${deck.queue.length + 1}개 남음</span></div>
+    <div class="qtitle">${esc(deck.title)}</div>`;
+  const tools = `<div class="tools">
+      <button class="btn" data-act="ssay" data-arg="${a(s.id)}"><b>🔊</b>듣기</button>
+      <button class="btn" data-act="sslow" data-arg="${a(s.id)}"><b>🐢</b>천천히</button>
+      <button class="btn" data-act="rec" data-arg="${a(s.id)}"><b>🎤</b>따라 말하기</button>
+    </div><div id="srres"></div>`;
+  const full = `<div class="sjp jp" data-act="ssay" data-arg="${a(s.id)}">${s.html}</div>
+      ${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}<div class="sko">${esc(s.ko)}</div>
+      ${s.note ? `<div class="tip">💡 ${esc(s.note)}</div>` : ''}${othersHTML(s)}`;
+  if (cur.isNew) return `${top}<div class="face"><span class="badge">✨ 새 문장</span>${full}</div>${tools}
+    <div class="stack"><button class="primary" data-act="cardseen">확인했어요 · 다음</button></div>
+    <p class="note" style="text-align:center">조금 뒤에 다시 나와서 기억나는지 확인해요.</p>`;
+  if (!deck.flipped) {
+    const front = cur.dir === 'jp'
+      ? `<div class="sjp jp" data-act="ssay" data-arg="${a(s.id)}">${s.html}</div>${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}<div class="ask">🔊 들어 보고, 무슨 뜻인지 떠올려 보세요</div>`
+      : `<div class="ko-front">${esc(s.ko)}</div><div class="ask">🗣️ 일본어로 소리 내어 말해 보세요</div>`;
+    return `${top}<div class="face">${front}</div><div class="stack"><button class="primary" data-act="flip">정답 보기</button></div>`;
+  }
+  const lv = srs[s.id] ? srs[s.id].lv : 0, nextLv = Math.min(lv + 1, INTERVALS.length - 1);
+  return `${top}<div class="face">${full}</div>${tools}
+    <div class="grades">
+      <button class="g0" data-act="grade" data-arg="0">몰랐어요<small>조금 뒤 다시</small></button>
+      <button class="g1" data-act="grade" data-arg="1">애매해요<small>내일</small></button>
+      <button class="g2" data-act="grade" data-arg="2">알았어요<small>${INTERVALS[nextLv]}일 뒤</small></button>
+    </div>`;
+};
+VIEWS.deckdone = () => `<div class="result">
+    <div style="font-size:64px">🎉</div><h2>오늘 학습 끝!</h2>
+    <p class="muted">복습 ${deck ? deck.reviewed : 0}개 · 새 문장 ${deck ? deck.learned : 0}개</p>
+    <p class="muted">${(() => { const t = allSents().filter(s => srs[s.id] && srs[s.id].due === addDays(1)).length; return t ? `내일 복습할 문장 ${t}개가 기다려요.` : ''; })()}</p>
+    <div class="stack">
+      <button class="primary sub" data-act="listenquiz">🎧 배운 문장으로 듣기 퀴즈</button>
+      <button class="btn" data-act="home">홈으로</button>
+    </div></div>`;
+
+function startDeck(title, items, push = true) {
+  if (!items.length) { alert('지금 복습할 문장이 없어요.'); return; }
+  const dir = () => settings.cardDir === 'mix' ? (Math.random() < 0.5 ? 'ko' : 'jp') : settings.cardDir;
+  const q = items.map(x => Object.assign({ dir: dir() }, x));
+  deck = { title, queue: q.slice(1), cur: q[0], flipped: false, done: 0, reviewed: 0, learned: 0, dir };
+  go({ v: 'cards' }, push);
+  if (deck.cur.isNew || deck.cur.dir === 'jp') setTimeout(() => speak(SENT[deck.cur.id].plain), 300);
+}
+function mixDeck(due, fresh) { // 복습 3개마다 새 문장 1개
+  const out = [], d = due.map(s => ({ id: s.id })), f = fresh.map(s => ({ id: s.id, isNew: true }));
+  while (d.length || f.length) { out.push(...d.splice(0, 3)); if (f.length) out.push(f.shift()); }
+  return out;
+}
+function nextCard() {
+  deck.done++;
+  if (!deck.queue.length) { go({ v: 'deckdone' }); return; }
+  deck.cur = deck.queue.shift(); deck.flipped = false;
+  render();
+  if (deck.cur.isNew || deck.cur.dir === 'jp') setTimeout(() => speak(SENT[deck.cur.id].plain), 300);
+}
+const requeue = (id, at) => deck.queue.splice(Math.min(deck.queue.length, at), 0, { id, dir: deck.dir() });
+
+// --- 내 문장 ---
+VIEWS.my = () => `
+  <h2>📝 내 문장</h2>
+  <p class="muted">전화 수업에서 배운 문장을 적어 두세요. 오늘의 문장 학습에 함께 나와요.</p>
+  <button class="primary" style="margin:12px 0" data-act="myadd">+ 문장 추가</button>
+  ${MYS.length ? `
+    <div class="actions">
+      <button class="btn" data-act="study" data-arg="cat:my"><b>🃏</b>카드 학습</button>
+      <button class="btn" data-act="listenquiz" data-arg="my" ${MYS.length < 2 ? 'disabled' : ''}><b>🎧</b>듣기 퀴즈</button>
+      <button class="btn" data-act="orderquiz" data-arg="my" ${MYS.some(s => s.chunks) ? '' : 'disabled'}><b>🧩</b>문장 조립</button>
+    </div>
+    <div class="slist">${MYS.map(sRow).join('')}</div>`
+  : `<div class="empty-box">아직 적은 문장이 없어요.<br>오늘 수업에서 배운 문장 하나부터 적어 볼까요?</div>`}`;
+
+VIEWS.myedit = () => {
+  const e = my.find(x => x.id === route.id) || { jp: '', kana: '', ko: '', note: '' };
+  return `
+    <button class="back" data-act="back">◀ 뒤로</button>
+    <h2>${route.id ? '문장 고치기' : '문장 추가'}</h2>
+    <section class="card">
+      <label class="field"><span>일본어 *</span><textarea id="f-jp" class="jp" placeholder="例: 週末は何をしましたか">${esc(e.jp)}</textarea></label>
+      <label class="field"><span>읽는 법 (히라가나, 한자가 있을 때)</span><input type="text" id="f-kana" value="${esc(e.kana)}" placeholder="しゅうまつは なにを しましたか"></label>
+      <label class="field"><span>한국어 뜻 *</span><input type="text" id="f-ko" value="${esc(e.ko)}" placeholder="주말에는 뭐 했어요?"></label>
+      <label class="field"><span>메모 (선생님 설명, 문법 등)</span><textarea id="f-note">${esc(e.note)}</textarea></label>
+      <p class="note">💡 일본어를 띄어쓰기로 나눠 쓰면 (例: 週末は 何を しましたか) '문장 조립' 퀴즈에도 나와요. 화면에는 붙여서 보여요.</p>
+      <div class="stack">
+        <button class="btn" data-act="mytry">🔊 소리 들어 보기</button>
+        <button class="primary" data-act="mysave">저장</button>
+        ${route.id ? `<button class="btn" style="color:var(--bad)" data-act="mydel">삭제</button>` : ''}
+      </div>
+    </section>`;
+};
+
+// --- 퀴즈 (글자, 단어, 문장 듣기) ---
+VIEWS.quiz = () => {
+  const q = quiz.items[quiz.i], n = quiz.items.length, picked = quiz.picked;
+  const kind = quiz.kind, ok = picked && picked === q.k;
+  let prompt, optCls = '';
+  if (kind === 'word') prompt = `<div class="qkana word jp" data-act="say" data-arg="${q.k}">${q.k}</div>
+      <p class="hint">${picked ? `${WBY[q.k].h} · ${WBY[q.k].e} ${WBY[q.k].ko}` : '무슨 뜻일까요?'}</p>`;
+  else if (kind === 'sent') {
+    optCls = 'wide';
+    prompt = `<button class="listen" data-act="ssay" data-arg="${a(q.k)}" aria-label="다시 듣기">🔊</button>
+      <p class="hint">${picked ? `<span class="jp">${SENT[q.k].html}</span>` : '무슨 뜻일까요? (여러 번 들어도 돼요)'}</p>`;
+  }
+  else if (q.mode === 'listen') prompt = `<button class="listen" data-act="say" data-arg="${q.k}" aria-label="다시 듣기">🔊</button>
+      <p class="hint">${picked ? `<span class="jp" style="font-size:28px">${q.k}</span> ${BY[q.k].h}` : '들리는 글자를 고르세요'}</p>`;
+  else prompt = `<div class="qkana jp" data-act="say" data-arg="${q.k}">${q.k}</div><p class="hint">어떻게 읽을까요?</p>`;
+  const opts = q.opts.map(k => {
+    const cls = !picked ? '' : k === q.k ? 'ok' : k === picked ? 'bad' : 'dim';
+    let body;
+    if (kind === 'word') body = `<b>${WBY[k].e}</b>${esc(WBY[k].ko)}`;
+    else if (kind === 'sent') body = esc(SENT[k].ko);
+    else if (q.mode === 'listen') body = `<span class="jp">${k}</span>`;
+    else body = lab(BY[k]);
+    return `<button class="opt ${kind === 'word' ? 'wordopt' : ''} ${cls}" data-act="answer" data-arg="${a(k)}">${body}</button>`;
+  }).join('');
+  const answerText = kind === 'word' ? WBY[q.k].ko : kind === 'sent' ? esc(SENT[q.k].ko) : BY[q.k].h;
+  const fb = !picked ? '' : ok ? `<p class="feedback ok">⭕ 맞았어요!</p>`
+    : `<p class="feedback bad">정답은 <b>${answerText}</b></p>
+       <button class="primary" style="margin-top:10px" data-act="next">다음</button>`;
+  return `
+    <div class="qtop"><button class="icon" data-act="back" aria-label="그만하기">✕</button>
+      <div class="bar"><i style="width:${pct(quiz.i, n)}%"></i></div><span>${quiz.i + 1}/${n}</span></div>
+    <div class="qtitle">${esc(quiz.title)}</div>
+    ${prompt}<div class="opts ${optCls}">${opts}</div>${fb}`;
+};
+
+// --- 문장 조립 ---
+VIEWS.order = () => {
+  const q = quiz.items[quiz.i], s = SENT[q.k], n = quiz.items.length;
+  const picked = q.picked, done = q.result != null;
+  return `
+    <div class="qtop"><button class="icon" data-act="back" aria-label="그만하기">✕</button>
+      <div class="bar"><i style="width:${pct(quiz.i, n)}%"></i></div><span>${quiz.i + 1}/${n}</span></div>
+    <div class="qtitle">${esc(quiz.title)} · 조각을 순서대로 누르세요</div>
+    <div class="oko">${esc(s.ko)}</div>
+    <div class="oans ${done ? (q.result ? 'ok' : 'bad') : ''}">${picked.map((ci, j) =>
+      `<button class="chunk jp" data-act="ounpick" data-arg="${j}" ${done ? 'disabled' : ''}>${s.chunks[ci].html}</button>`).join('')}</div>
+    ${done ? `
+      <p class="feedback ${q.result ? 'ok' : 'bad'}">${q.result ? '⭕ 맞았어요!' : '정답은 이렇게 말해요'}</p>
+      ${q.result ? '' : `<p class="hint"><span class="jp">${s.html}</span></p>`}
+      <div class="tools" style="grid-template-columns:1fr 1fr">
+        <button class="btn" data-act="ssay" data-arg="${a(s.id)}"><b>🔊</b>듣기</button>
+        <button class="btn" data-act="rec" data-arg="${a(s.id)}"><b>🎤</b>따라 말하기</button>
+      </div><div id="srres"></div>
+      <button class="primary" style="margin-top:12px" data-act="onext">다음</button>`
+    : `<div class="opool">${q.order.map(ci =>
+        `<button class="chunk jp ${picked.includes(ci) ? 'used' : ''}" data-act="opick" data-arg="${ci}">${s.chunks[ci].html}</button>`).join('')}</div>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" data-act="ssay" data-arg="${a(s.id)}">🔊 힌트 듣기</button>
+        <button class="btn" data-act="oreset">처음부터</button>
+      </div>`}`;
+};
+
+VIEWS.result = () => {
+  const n = quiz.items.length, s = quiz.score;
+  const msg = s === n ? '완벽해요! 🎉' : s >= n * 0.8 ? '아주 잘했어요! 👏' : s >= n * 0.5 ? '좋아요, 조금만 더! 💪' : '괜찮아요, 반복하면 늘어요 🌱';
+  const wrong = [...new Set(quiz.wrong)];
+  const sentKind = quiz.kind === 'sent' || quiz.kind === 'order';
+  let wrongHTML = '';
+  if (wrong.length) wrongHTML = sentKind
+    ? `<h4>다시 볼 문장</h4><div class="slist" style="text-align:left">${wrong.map(id => sRow(SENT[id])).join('')}</div>`
+    : `<h4>틀린 ${quiz.kind === 'word' ? '단어' : '글자'} (누르면 소리)</h4><div class="wrongs">${wrong.map(k =>
+        `<button class="jp" data-act="${quiz.kind === 'word' ? 'say' : 'kana'}" data-arg="${k}">${k}</button>`).join('')}</div>`;
+  return `<div class="result">
+    <div class="qtitle">${esc(quiz.title)}</div>
+    <div class="score">${s} / ${n}</div>
+    <p style="font-size:20px">${msg}</p>
+    ${quiz.advanced ? `<div class="unlock">🎉 다음 단계로! <b>${esc(quiz.advanced)}</b></div>` : ''}
+    ${wrongHTML}
+    <div class="stack">
+      ${wrong.length ? `<button class="primary" data-act="retrywrong">틀린 것만 다시</button>` : ''}
+      ${quiz.unitCheck && !wrong.length
+        ? `<button class="primary" data-act="kanatoday">${unitIdx < UNITS.length ? '계속 학습하기' : '복습하기'}</button>`
+        : `<button class="btn" data-act="again">새로 한 번 더</button>`}
+      <button class="btn" data-act="home">홈으로</button>
+    </div></div>`;
+};
+
+// --- 글자 ---
 VIEWS.chart = () => {
   const sc = settings.chartScript;
   const sec = g => {
@@ -397,9 +859,22 @@ VIEWS.chart = () => {
       `<button class="cell lv${level(o.k)}" data-act="kana" data-arg="${o.k}"><span class="jp">${o.k}</span>${settings.chartHint ? `<small>${lab(o)}</small>` : ''}</button>`).join('');
     return `<h4>${GROUP_NAME[g]}</h4><div class="kgrid ${g === 'yoon' ? 'three' : ''}">${cells}</div>`;
   };
+  const done = unitIdx >= UNITS.length, u = UNITS[Math.min(unitIdx, UNITS.length - 1)];
   return `
-    <h2>문자표</h2>
-    <div class="seg">
+    <h2>글자</h2>
+    <section class="card">
+      <h3>단계 학습</h3>
+      <p class="muted">${done ? '모든 글자를 배웠어요! 약한 글자를 복습해요.' : `지금 배우는 중 · <b>${u.label}</b> (${unitIdx + 1}/${UNITS.length}단계)`}</p>
+      <div class="stack" style="margin-top:10px">
+        <button class="primary" data-act="kanatoday">${done ? '글자 복습하기' : '이어서 배우기'}</button>
+        ${unitIdx < KATA_START ? `<button class="btn" data-act="skiphira">히라가나는 알아요 → 가타카나부터</button>` : ''}
+      </div>
+    </section>
+    <div class="row">
+      <button class="btn" data-act="tab" data-arg="quizsetup">✏️ 글자 퀴즈</button>
+      <button class="btn" data-act="tab" data-arg="words">🍜 메뉴판 읽기</button>
+    </div>
+    <div class="seg" style="margin-top:14px">
       <button class="${sc === 'hira' ? 'on' : ''}" data-act="chartscript" data-arg="hira">히라가나 <span class="jp">あ</span></button>
       <button class="${sc === 'kata' ? 'on' : ''}" data-act="chartscript" data-arg="kata">가타카나 <span class="jp">ア</span></button>
     </div>
@@ -407,14 +882,13 @@ VIEWS.chart = () => {
     ${sec('basic')}${sec('daku')}${sec('yoon')}`;
 };
 
-function sheetHTML(k) {
+function kanaSheet(k) {
   const o = BY[k];
   if (!o) return '';
-  const s = stats[k];
-  const tip = KANA_TIPS[o.r];
-  return `<div class="sheet-bg" data-act="closesheet"></div>
+  const s = stats[k], tip = KANA_TIPS[o.r];
+  return `<div class="sheet-bg" data-act="back"></div>
     <div class="sheet-card">
-      <button class="xbtn" data-act="closesheet" aria-label="닫기">✕</button>
+      <button class="xbtn" data-act="back" aria-label="닫기">✕</button>
       <div class="sk jp" data-act="say" data-arg="${k}">${k}</div>
       <div class="sl">${o.h}<span>${o.r}</span></div>
       ${tip ? `<div class="tip">💡 ${tip}</div>` : ''}
@@ -435,6 +909,7 @@ VIEWS.quizsetup = () => {
   };
   const n = freePool().length;
   return `
+    <button class="back" data-act="tab" data-arg="chart">◀ 글자</button>
     <h2>글자 퀴즈</h2>
     <section class="card">
       <h4 style="margin-top:0">글자</h4><div class="chips">${chip('scripts', 'hira', '히라가나')}${chip('scripts', 'kata', '가타카나')}</div>
@@ -448,70 +923,19 @@ VIEWS.quizsetup = () => {
     <section class="card">
       <h3>🔀 헷갈리는 글자 연습</h3>
       <p class="muted">비슷하게 생긴 글자만 모아서 연습해요.</p>
-      <p class="jp" style="font-size:24px;margin:10px 0">ぬ・め　ね・れ・わ　シ・ツ　ソ・ン</p>
+      <p class="jp" style="font-size:24px;margin:10px 0">シ・ツ　ソ・ン　ク・タ・ケ　ぬ・め</p>
       <button class="btn" style="width:100%" data-act="confquiz">헷갈리는 글자 퀴즈</button>
     </section>
     <p class="note">자주 틀리는 글자가 더 자주 나와요.</p>`;
 };
-
 function freePool() {
   const q = settings.quiz;
   return KANA.filter(o => q.scripts.includes(o.script) && q.groups.includes(o.group)).map(o => o.k);
 }
 
-VIEWS.quiz = () => {
-  const q = quiz.items[quiz.i], n = quiz.items.length, picked = quiz.picked;
-  const isWord = quiz.kind === 'word';
-  const ok = picked && picked === q.k;
-  let prompt;
-  if (isWord) prompt = `<div class="qkana word jp" data-act="say" data-arg="${q.k}">${q.k}</div>
-      <p class="hint">${picked ? `${WBY[q.k].h} · ${WBY[q.k].e} ${WBY[q.k].ko}` : '무슨 뜻일까요?'}</p>`;
-  else if (q.mode === 'listen') prompt = `<button class="listen" data-act="say" data-arg="${q.k}" aria-label="다시 듣기">🔊</button>
-      <p class="hint">${picked ? `<span class="jp" style="font-size:28px">${q.k}</span> ${BY[q.k].h}` : '들리는 글자를 고르세요'}</p>`;
-  else prompt = `<div class="qkana jp" data-act="say" data-arg="${q.k}">${q.k}</div><p class="hint">어떻게 읽을까요?</p>`;
-  const opts = q.opts.map(k => {
-    const cls = !picked ? '' : k === q.k ? 'ok' : k === picked ? 'bad' : 'dim';
-    let body;
-    if (isWord) body = `<b>${WBY[k].e}</b>${esc(WBY[k].ko)}`;
-    else if (q.mode === 'listen') body = `<span class="jp">${k}</span>`;
-    else body = lab(BY[k]);
-    return `<button class="opt ${isWord ? 'wordopt' : ''} ${cls}" data-act="answer" data-arg="${k}">${body}</button>`;
-  }).join('');
-  const fb = !picked ? '' : ok ? `<p class="feedback ok">⭕ 맞았어요!</p>`
-    : `<p class="feedback bad">정답은 <b>${isWord ? WBY[q.k].ko : BY[q.k].h}</b></p>
-       <button class="primary" style="margin-top:10px" data-act="next">다음</button>`;
-  return `
-    <div class="qtop"><button class="icon" data-act="back" aria-label="그만하기">✕</button>
-      <div class="bar"><i style="width:${pct(quiz.i, n)}%"></i></div><span>${quiz.i + 1}/${n}</span></div>
-    <div class="qtitle">${esc(quiz.title)}</div>
-    ${prompt}<div class="opts">${opts}</div>${fb}`;
-};
-
-VIEWS.result = () => {
-  const n = quiz.items.length, s = quiz.score;
-  const msg = s === n ? '완벽해요! 🎉' : s >= n * 0.8 ? '아주 잘했어요! 👏' : s >= n * 0.5 ? '좋아요, 조금만 더! 💪' : '괜찮아요, 반복하면 늘어요 🌱';
-  const wrong = [...new Set(quiz.wrong)];
-  const isWord = quiz.kind === 'word';
-  return `<div class="result">
-    <div class="qtitle">${esc(quiz.title)}</div>
-    <div class="score">${s} / ${n}</div>
-    <p style="font-size:20px">${msg}</p>
-    ${quiz.advanced ? `<div class="unlock">🎉 다음 단계로! <b>${esc(quiz.advanced)}</b></div>` : ''}
-    ${wrong.length ? `<h4>틀린 ${isWord ? '단어' : '글자'} (누르면 소리)</h4><div class="wrongs">${wrong.map(k =>
-      `<button class="jp" data-act="${isWord ? 'say' : 'kana'}" data-arg="${k}">${k}</button>`).join('')}</div>` : ''}
-    <div class="stack">
-      ${wrong.length ? `<button class="primary" data-act="retrywrong">틀린 것만 다시</button>` : ''}
-      ${quiz.unitCheck && !wrong.length
-        ? `<button class="primary" data-act="today">${unitIdx < UNITS.length ? '계속 학습하기' : '복습하기'}</button>`
-        : `<button class="btn" data-act="again">새로 한 번 더</button>`}
-      <button class="btn" data-act="home">홈으로</button>
-    </div></div>`;
-};
-
 VIEWS.intro = () => {
   const list = route.list, i = route.i, k = list[i], o = BY[k];
-  const tip = KANA_TIPS[o.r];
-  const last = i === list.length - 1;
+  const tip = KANA_TIPS[o.r], last = i === list.length - 1;
   return `
     <div class="qtop"><button class="icon" data-act="back" aria-label="닫기">✕</button>
       <div class="bar"><i style="width:${pct(i + 1, list.length)}%"></i></div><span>${i + 1}/${list.length}</span></div>
@@ -549,15 +973,13 @@ VIEWS.write = () => {
 };
 
 VIEWS.words = () => {
-  const list = WORDS.map(([k, h, ko, e]) => {
-    const lv = level(k, wstats);
-    return `<button class="wrow" data-act="say" data-arg="${k}"><span class="e">${e}</span>
+  const list = WORDS.map(([k, h, ko, e]) => `<button class="wrow" data-act="say" data-arg="${k}"><span class="e">${e}</span>
       <span><span class="jp">${k}</span><small>${h}</small></span>
-      <span class="m">${esc(ko)}${lv === 2 ? ' ✅' : ''}</span></button>`;
-  }).join('');
+      <span class="m">${esc(ko)}${level(k, wstats) === 2 ? ' ✅' : ''}</span></button>`).join('');
   return `
+    <button class="back" data-act="tab" data-arg="chart">◀ 글자</button>
     <h2>메뉴판 읽기</h2>
-    <p class="muted">일본 메뉴판과 간판의 외래어는 대부분 가타카나로 써요. 가타카나를 배우고 나서 읽어 보세요.</p>
+    <p class="muted">일본 메뉴판과 간판의 외래어는 대부분 가타카나로 써요.</p>
     <button class="primary" style="margin:12px 0" data-act="wordquiz">단어 퀴즈 10문제<small>가타카나를 읽고 뜻 맞히기</small></button>
     <details class="card"><summary>📖 가타카나 읽기 규칙 4가지</summary>
       <div class="rule">
@@ -572,7 +994,7 @@ VIEWS.words = () => {
 };
 
 VIEWS.settings = () => {
-  const lb = (v, t) => `<button class="chip ${settings.label === v ? 'on' : ''}" data-act="setlabel" data-arg="${v}">${t}</button>`;
+  const chip = (key, v, t) => `<button class="chip ${settings[key] === v ? 'on' : ''}" data-act="setv" data-arg="${key}:${v}">${t}</button>`;
   const voice = !hasTTS ? `<div class="voice warn">⚠️ 이 브라우저는 소리 기능을 지원하지 않아요. Chrome에서 열어 주세요.</div>`
     : jaVoice ? `<div class="voice">✅ 일본어 음성: ${esc(jaVoice.name)}</div>`
     : `<div class="voice warn">⚠️ 일본어 음성을 찾지 못했어요. 소리가 안 나면 휴대폰 <b>설정 → 일반 → 텍스트 음성 변환(TTS)</b>에서 Google 음성 엔진의 <b>일본어</b> 음성 데이터를 설치해 주세요.</div>`;
@@ -582,25 +1004,32 @@ VIEWS.settings = () => {
       <label class="field"><span>여행지</span><input type="text" data-set="place" value="${esc(settings.place)}" placeholder="예: 오사카"></label>
       <label class="field"><span>출발 날짜</span><input type="date" data-set="trip" value="${esc(settings.trip)}"></label>
     </section>
-    <section class="card"><h3>🔤 발음 표기</h3>
-      <div class="chips">${lb('ko', '한글 (아)')}${lb('ro', '로마자 (a)')}${lb('both', '둘 다')}</div>
-      <label class="check"><input type="checkbox" data-set="chartHint" ${settings.chartHint ? 'checked' : ''}>문자표에 발음 표시</label>
-      <p class="note">익숙해지면 문자표 발음 표시를 끄고 연습해 보세요.</p>
+    <section class="card"><h3>💬 문장 학습</h3>
+      <h4 style="margin-top:0">하루에 배울 새 문장</h4>
+      <div class="chips">${chip('newPerDay', 3, '3개')}${chip('newPerDay', 5, '5개')}${chip('newPerDay', 10, '10개')}</div>
+      <h4>카드 앞면</h4>
+      <div class="chips">${chip('cardDir', 'ko', '🇰🇷 한국어 보고 말하기')}${chip('cardDir', 'jp', '🇯🇵 일본어 듣고 뜻 떠올리기')}${chip('cardDir', 'mix', '섞어서')}</div>
+      <label class="check"><input type="checkbox" data-set="furi" ${settings.furi ? 'checked' : ''}>한자 위에 읽는 법(후리가나) 표시</label>
     </section>
     <section class="card"><h3>🔊 소리</h3>
       ${voice}
       <label class="field"><span>말하기 속도 (${settings.rate.toFixed(1)})</span>
         <input type="range" min="0.5" max="1.2" step="0.1" data-set="rate" value="${settings.rate}"></label>
       <button class="btn" style="width:100%" data-act="say" data-arg="こんにちは。よろしくお願いします。">こんにちは 들어 보기</button>
+      <p class="note">🎤 따라 말하기는 처음 한 번 마이크 사용을 허용해야 해요.</p>
+    </section>
+    <section class="card"><h3>🔤 글자 발음 표기</h3>
+      <div class="chips">${chip('label', 'ko', '한글 (아)')}${chip('label', 'ro', '로마자 (a)')}${chip('label', 'both', '둘 다')}</div>
+      <label class="check"><input type="checkbox" data-set="chartHint" ${settings.chartHint ? 'checked' : ''}>문자표에 발음 표시</label>
     </section>
     <section class="card"><h3>💾 학습 기록</h3>
-      <p class="note">기록은 이 휴대폰의 Chrome 안에만 저장돼요. Chrome 데이터를 지우면 사라지니 가끔 백업해 두세요.</p>
+      <p class="note">기록과 내 문장은 이 휴대폰의 Chrome 안에만 저장돼요. Chrome 데이터를 지우면 사라지니 가끔 백업해 두세요.</p>
       <div class="row" style="margin-top:10px">
         <button class="btn" data-act="export">백업 파일 저장</button>
         <button class="btn" data-act="import">백업 불러오기</button>
       </div>
       <input type="file" id="importFile" accept="application/json,.json" hidden>
-      <button class="btn" style="width:100%;margin-top:8px;color:var(--bad)" data-act="reset">처음부터 다시 시작</button>
+      <button class="btn" style="width:100%;margin-top:8px;color:var(--bad)" data-act="reset">학습 기록 지우기</button>
     </section>
     <section class="card"><h3>📲 앱으로 설치하기</h3>
       <p class="note">Chrome 오른쪽 위 <b>⋮ 메뉴 → 앱 설치</b>를 누르면 홈 화면에 앱 아이콘이 생기고, 인터넷이 없어도 열려요.</p>
@@ -622,19 +1051,27 @@ function wordOpts(k) {
   for (const [c, , ko] of shuffle(WORDS)) if (out.length < 3 && !used.has(ko)) { used.add(ko); out.push(c); }
   return shuffle([k, ...out]);
 }
+function sentOpts(id) {
+  const s = SENT[id], used = new Set([s.ko]), out = [];
+  const tryAdd = x => { if (out.length < 3 && !used.has(x.ko)) { used.add(x.ko); out.push(x.id); } };
+  shuffle(allSents().filter(x => x.cat === s.cat)).forEach(tryAdd);
+  shuffle(allSents()).forEach(tryAdd);
+  return shuffle([id, ...out]);
+}
 function startQuiz(q, push = true) {
   quiz = Object.assign({ i: 0, score: 0, wrong: [], picked: null }, q);
-  go({ v: 'quiz' }, push);
+  go({ v: q.kind === 'order' ? 'order' : 'quiz' }, push);
   autoSpeak();
 }
 function autoSpeak() {
   const q = quiz && quiz.items[quiz.i];
-  if (q && q.mode === 'listen') setTimeout(() => speak(q.k), 300);
+  if (!q) return;
+  if (quiz.kind === 'sent') setTimeout(() => speak(SENT[q.k].plain), 300);
+  else if (q.mode === 'listen') setTimeout(() => speak(q.k), 300);
 }
 function kanaQuiz({ title, pool, n, mode, optPool }, push = true) {
   const ks = pickMany(pool, n);
-  const make = () => kanaQuiz({ title, pool, n, mode, optPool }, false);
-  startQuiz({ kind: 'kana', title, again: make,
+  startQuiz({ kind: 'kana', title, again: () => kanaQuiz({ title, pool, n, mode, optPool }, false),
     items: ks.map(k => ({ k, mode: mode === 'mix' ? (Math.random() < 0.5 ? 'listen' : 'read') : mode, opts: kanaOpts(k, optPool || pool) })) }, push);
 }
 function wordQuiz(push = true, pool) {
@@ -642,22 +1079,42 @@ function wordQuiz(push = true, pool) {
   startQuiz({ kind: 'word', title: '메뉴판 읽기', again: () => wordQuiz(false),
     items: ks.map(k => ({ k, mode: 'read', opts: wordOpts(k) })) }, push);
 }
-function startToday(push = true) {
-  if (unitIdx >= UNITS.length) {
-    kanaQuiz({ title: '오늘의 복습', pool: KANA.map(o => o.k), n: 15, mode: 'mix' }, push);
-    return;
-  }
+function sentPool(cat) { // 상황을 안 고르면 배운 문장, 배운 게 적으면 전체
+  if (cat) return catSents(cat);
+  const l = catSents('learned');
+  return l.length >= 4 ? l : allSents();
+}
+function listenQuiz(cat, push = true, ids) {
+  const pool = ids || shuffle(sentPool(cat)).slice(0, 10).map(s => s.id);
+  const title = '듣기 퀴즈' + (cat ? ' · ' + CAT_INFO[cat].name : '');
+  startQuiz({ kind: 'sent', title, again: () => listenQuiz(cat, false),
+    items: shuffle(pool).map(k => ({ k, opts: sentOpts(k) })) }, push);
+}
+function orderQuiz(cat, push = true, ids) {
+  const pool = ids || shuffle(sentPool(cat).filter(s => s.chunks)).slice(0, 8).map(s => s.id);
+  if (!pool.length) { alert('조립할 수 있는 문장이 없어요.'); return; }
+  const title = '문장 조립' + (cat ? ' · ' + CAT_INFO[cat].name : '');
+  startQuiz({ kind: 'order', title, again: () => orderQuiz(cat, false),
+    items: shuffle(pool).map(k => {
+      const n = SENT[k].chunks.length, idx = [...Array(n).keys()];
+      let order = shuffle(idx);
+      for (let t = 0; t < 5 && order.every((v, i) => v === i); t++) order = shuffle(idx);
+      return { k, order, picked: [], result: null };
+    }) }, push);
+}
+function startKanaToday(push = true) {
+  if (unitIdx >= UNITS.length) { kanaQuiz({ title: '글자 복습', pool: KANA.map(o => o.k), n: 15, mode: 'mix' }, push); return; }
   const u = UNITS[unitIdx];
   if (u.chars.some(k => !stats[k])) go({ v: 'intro', unit: unitIdx, list: u.chars, i: 0 }, push);
   else unitQuiz(push);
 }
 function unitQuiz(push) {
   const u = UNITS[unitIdx];
-  const prev = UNITS.slice(0, unitIdx).flatMap(x => x.chars);
+  const prev = UNITS.slice(0, unitIdx).flatMap(x => x.chars).filter(k => stats[k]);
   const extra = Math.max(0, 12 - u.chars.length);
   const ks = shuffle([...u.chars, ...(prev.length ? pickWeighted(prev, Math.min(extra, prev.length)) : pickMany(u.chars, extra))]);
   const optPool = [...u.chars, ...prev];
-  startQuiz({ kind: 'kana', title: '오늘의 학습 · ' + u.label, unitCheck: true, again: () => startToday(false),
+  startQuiz({ kind: 'kana', title: '글자 단계 학습 · ' + u.label, unitCheck: true, again: () => startKanaToday(false),
     items: ks.map(k => ({ k, mode: stats[k] && stats[k].c > 0 && Math.random() < 0.35 ? 'listen' : 'read', opts: kanaOpts(k, optPool) })) }, push);
 }
 function finishQuiz() {
@@ -693,23 +1150,100 @@ function mountWrite() {
 // ---------- 버튼 동작 ----------
 let nextTimer = null;
 const ACT = {
-  tab: a => go({ v: a }),
+  tab: v => go({ v }),
   home: () => go({ v: 'home' }),
   back: () => history.back(),
-  say: a => speak(a),
-  kana: a => { speak(a); go(Object.assign({}, route, { sheet: a }), true); },
-  closesheet: () => history.back(),
-  chartscript: a => { settings.chartScript = a; saveSettings(); render(); },
-  today: () => startToday(route.v === 'home'),
-  write: a => {
-    const o = BY[a], list = rowOf(o.script, o.row).cells.filter(Boolean).map(x => x.k);
-    go({ v: 'write', list, i: list.indexOf(a) }, true);
+  say: t => speak(t),
+  ssay: id => SENT[id] && speak(SENT[id].plain),
+  sslow: id => SENT[id] && speak(SENT[id].plain, true),
+  rec: id => recognize(id),
+
+  // 문장
+  cat: id => go({ v: 'cat', id }, true),
+  ss: id => over({ ss: id }),
+  big: id => over({ big: id }),
+  fav: id => {
+    favs = favs.includes(id) ? favs.filter(x => x !== id) : [id, ...favs];
+    LS.set('nh-fav', favs); render();
   },
-  writeunit: () => {
-    const u = UNITS[Math.min(unitIdx, UNITS.length - 1)];
-    go({ v: 'write', list: u.chars, i: 0 }, true);
+  study: arg => {
+    const push = !['result', 'deckdone', 'cards'].includes(route.v);
+    if (arg && arg.startsWith('one:')) { const id = arg.slice(4); startDeck('카드 연습', [{ id, isNew: !srs[id] }], true); return; }
+    const cat = arg && arg.startsWith('cat:') ? arg.slice(4) : null;
+    const { due, fresh } = plan(cat, arg === 'more' ? 5 : undefined);
+    const title = cat ? CAT_INFO[cat].e + ' ' + CAT_INFO[cat].name : '오늘의 문장 학습';
+    if (!due.length && !fresh.length) { alert(cat ? '이 상황의 문장을 모두 배웠고, 오늘 복습할 문장도 없어요. 👏' : '오늘 할 분량을 다 했어요!'); return; }
+    startDeck(title, mixDeck(due, fresh), push);
   },
-  wmove: a => { const n = route.list.length; go(Object.assign({}, route, { i: (route.i + Number(a) + n) % n })); },
+  flip: () => { deck.flipped = true; render(); speak(SENT[deck.cur.id].plain); },
+  cardseen: () => {
+    const id = deck.cur.id;
+    if (!srs[id]) { srs[id] = { lv: 0, due: today(), c: 0, w: 0 }; LS.set('nh-srs', srs); countNew(); markDay(); }
+    deck.learned++;
+    requeue(id, 3);
+    nextCard();
+  },
+  grade: g => {
+    g = Number(g);
+    const id = deck.cur.id;
+    grade(id, g);
+    deck.reviewed++;
+    if (g === 0) requeue(id, 3);
+    nextCard();
+  },
+  listenquiz: cat => listenQuiz(cat || null, !['result', 'deckdone'].includes(route.v)),
+  orderquiz: cat => orderQuiz(cat || null, !['result'].includes(route.v)),
+  opick: ci => {
+    const q = quiz.items[quiz.i], s = SENT[q.k];
+    ci = Number(ci);
+    if (q.result != null || q.picked.includes(ci)) return;
+    q.picked.push(ci);
+    if (q.picked.length === s.chunks.length) {
+      q.result = q.picked.map(i => s.chunks[i].plain).join('') === s.chunks.map(c => c.plain).join('');
+      if (q.result) quiz.score++; else quiz.wrong.push(q.k);
+      markDay();
+      speak(s.plain);
+    }
+    render();
+  },
+  ounpick: j => { const q = quiz.items[quiz.i]; if (q.result == null) { q.picked.splice(Number(j), 1); render(); } },
+  oreset: () => { quiz.items[quiz.i].picked = []; render(); },
+  onext: () => { quiz.i++; if (quiz.i >= quiz.items.length) go({ v: 'result' }); else render(); },
+
+  // 내 문장
+  myadd: () => go({ v: 'myedit' }, true),
+  myedit: id => go({ v: 'myedit', id }, true),
+  mytry: () => speak($('#f-jp').value.replace(/\s+/g, '')),
+  mysave: () => {
+    const jp = $('#f-jp').value.trim(), ko = $('#f-ko').value.trim();
+    if (!jp || !ko) { alert('일본어와 한국어 뜻을 적어 주세요.'); return; }
+    const data = { jp, ko, kana: $('#f-kana').value.trim(), note: $('#f-note').value.trim() };
+    const old = my.find(x => x.id === route.id);
+    if (old) {
+      if (old.jp.replace(/\s+/g, '') !== jp.replace(/\s+/g, '')) { delete srs[old.id]; LS.set('nh-srs', srs); }
+      Object.assign(old, data);
+    } else my.unshift(Object.assign({ id: 'my-' + Date.now(), at: today() }, data));
+    LS.set('nh-my', my); buildMy();
+    history.back();
+  },
+  mydel: () => {
+    if (!confirm('이 문장을 지울까요?')) return;
+    const id = route.id;
+    my = my.filter(x => x.id !== id); favs = favs.filter(x => x !== id); delete srs[id];
+    LS.set('nh-my', my); LS.set('nh-fav', favs); LS.set('nh-srs', srs); buildMy();
+    history.back();
+  },
+
+  // 글자
+  kana: k => { speak(k); over({ sheet: k }); },
+  chartscript: v => { settings.chartScript = v; saveSettings(); render(); },
+  kanatoday: () => startKanaToday(route.v !== 'result'),
+  skiphira: () => { unitIdx = Math.max(unitIdx, KATA_START); LS.set('nh-unit', unitIdx); settings.chartScript = 'kata'; saveSettings(); render(); },
+  write: k => {
+    const o = BY[k], list = rowOf(o.script, o.row).cells.filter(Boolean).map(x => x.k);
+    go({ v: 'write', list, i: list.indexOf(k) }, true);
+  },
+  wmove: d => { const n = route.list.length; go(Object.assign({}, route, { i: (route.i + Number(d) + n) % n })); },
   clear: () => mountWrite(),
   guide: () => go(Object.assign({}, route, { hide: !route.hide })),
   introNext: () => {
@@ -717,33 +1251,35 @@ const ACT = {
     else unitQuiz(false);
   },
   introPrev: () => { go(Object.assign({}, route, { i: route.i - 1 })); speak(route.list[route.i]); },
-  qset: a => {
-    const [key, raw] = a.split(':'), q = settings.quiz;
+  qset: arg => {
+    const [key, raw] = arg.split(':'), q = settings.quiz;
     if (Array.isArray(q[key])) q[key] = q[key].includes(raw) ? q[key].filter(x => x !== raw) : [...q[key], raw];
     else q[key] = key === 'n' ? Number(raw) : raw;
     saveSettings(); render();
   },
   freequiz: () => {
     const q = settings.quiz;
-    const title = q.scripts.map(s => SCRIPT_NAME[s]).join('+') + ' · ' + q.groups.map(g => GROUP_NAME[g]).join('·');
-    kanaQuiz({ title, pool: freePool(), n: q.n, mode: q.mode });
+    kanaQuiz({ title: q.scripts.map(s => SCRIPT_NAME[s]).join('+') + ' · ' + q.groups.map(g => GROUP_NAME[g]).join('·'), pool: freePool(), n: q.n, mode: q.mode });
   },
   confquiz: () => {
     const scripts = settings.quiz.scripts.length ? settings.quiz.scripts : ['hira', 'kata'];
-    const pool = Object.keys(CONF).filter(k => scripts.includes(BY[k].script));
-    kanaQuiz({ title: '헷갈리는 글자', pool, n: 10, mode: 'read' });
+    kanaQuiz({ title: '헷갈리는 글자', pool: Object.keys(CONF).filter(k => scripts.includes(BY[k].script)), n: 10, mode: 'read' });
   },
   wordquiz: () => wordQuiz(),
-  answer: a => {
+
+  // 퀴즈 공통
+  answer: k => {
     if (!quiz || quiz.picked) return;
-    const q = quiz.items[quiz.i], ok = a === q.k;
-    quiz.picked = a;
-    if (quiz.kind === 'word') record(wstats, 'nh-wstats', q.k, ok); else record(stats, 'nh-stats', q.k, ok);
+    const q = quiz.items[quiz.i], ok = k === q.k;
+    quiz.picked = k;
+    if (quiz.kind === 'word') record(wstats, 'nh-wstats', q.k, ok);
+    else if (quiz.kind === 'kana') record(stats, 'nh-stats', q.k, ok);
+    else markDay();
     if (ok) quiz.score++; else quiz.wrong.push(q.k);
-    speak(q.k);
+    speak(quiz.kind === 'sent' ? SENT[q.k].plain : q.k);
     render();
     clearTimeout(nextTimer);
-    if (ok) nextTimer = setTimeout(() => { if (quiz && quiz.picked && route.v === 'quiz') ACT.next(); }, 1000);
+    if (ok) nextTimer = setTimeout(() => { if (quiz && quiz.picked && route.v === 'quiz') ACT.next(); }, quiz.kind === 'sent' ? 1600 : 1000);
   },
   next: () => {
     clearTimeout(nextTimer);
@@ -752,35 +1288,46 @@ const ACT = {
     else { render(); autoSpeak(); }
   },
   retrywrong: () => {
-    const wrong = [...new Set(quiz.wrong)], kind = quiz.kind, old = quiz;
-    if (kind === 'word') { wordQuiz(false, wrong); return; }
-    const ks = shuffle([...wrong, ...wrong]).slice(0, Math.max(wrong.length, Math.min(10, wrong.length * 2)));
-    startQuiz({ kind: 'kana', title: '틀린 글자 다시', again: old.again,
-      items: ks.map(k => ({ k, mode: 'read', opts: kanaOpts(k, sameScriptPool(k)) })) }, false);
+    const wrong = [...new Set(quiz.wrong)], old = quiz;
+    if (old.kind === 'word') wordQuiz(false, wrong);
+    else if (old.kind === 'sent') listenQuiz(null, false, wrong);
+    else if (old.kind === 'order') orderQuiz(null, false, wrong);
+    else {
+      const ks = shuffle([...wrong, ...wrong]).slice(0, Math.max(wrong.length, Math.min(10, wrong.length * 2)));
+      startQuiz({ kind: 'kana', title: '틀린 글자 다시', again: old.again,
+        items: ks.map(k => ({ k, mode: 'read', opts: kanaOpts(k, sameScriptPool(k)) })) }, false);
+    }
+    quiz.again = old.again;
   },
   again: () => quiz.again(),
-  setlabel: a => { settings.label = a; saveSettings(); render(); },
+
+  // 설정
+  setv: arg => {
+    const [key, raw] = arg.split(':');
+    settings[key] = typeof settings[key] === 'number' ? Number(raw) : raw;
+    saveSettings(); render();
+  },
   export: () => {
-    const data = { app: 'nihongo-travel', v: 1, at: new Date().toISOString(), settings, stats, wstats, days, unitIdx };
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
-    a.download = `일본어-백업-${today()}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    const data = { app: 'nihongo-travel', v: 2, at: new Date().toISOString(), settings, stats, wstats, srs, my, favs, newDay, days, unitIdx };
+    const el = document.createElement('a');
+    el.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    el.download = `일본어-백업-${today()}.json`;
+    el.click();
+    setTimeout(() => URL.revokeObjectURL(el.href), 5000);
   },
   import: () => $('#importFile').click(),
   reset: () => {
-    if (!confirm('학습 기록을 모두 지우고 처음부터 시작할까요? (여행 날짜는 남겨 둬요)')) return;
-    ['nh-stats', 'nh-wstats', 'nh-days', 'nh-unit'].forEach(k => localStorage.removeItem(k));
+    if (!confirm('학습 기록(글자·문장 복습 기록, 연속 학습일)을 모두 지울까요?\n내 문장, 즐겨찾기, 여행 날짜는 남겨 둬요.')) return;
+    ['nh-stats', 'nh-wstats', 'nh-srs', 'nh-newday', 'nh-days', 'nh-unit'].forEach(k => localStorage.removeItem(k));
     location.reload();
   },
 };
 
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]');
-  if (!el) return;
+  if (!el || el.disabled) return;
   const fn = ACT[el.dataset.act];
-  if (fn) fn(el.dataset.arg, el);
+  if (fn) { e.stopPropagation(); fn(el.dataset.arg, el); }
 });
 document.addEventListener('change', e => {
   const el = e.target;
@@ -788,8 +1335,9 @@ document.addEventListener('change', e => {
     el.files[0].text().then(t => {
       const d = JSON.parse(t);
       if (d.app !== 'nihongo-travel') throw new Error();
-      LS.set('nh-settings', d.settings); LS.set('nh-stats', d.stats); LS.set('nh-wstats', d.wstats);
-      LS.set('nh-days', d.days); LS.set('nh-unit', d.unitIdx);
+      const put = { 'nh-settings': d.settings, 'nh-stats': d.stats, 'nh-wstats': d.wstats, 'nh-srs': d.srs, 'nh-my': d.my,
+        'nh-fav': d.favs, 'nh-newday': d.newDay, 'nh-days': d.days, 'nh-unit': d.unitIdx };
+      for (const [k, v] of Object.entries(put)) if (v !== undefined) LS.set(k, v);
       alert('기록을 불러왔어요.');
       location.reload();
     }).catch(() => alert('백업 파일이 아니에요. 이 앱에서 저장한 파일을 골라 주세요.'));
@@ -799,17 +1347,22 @@ document.addEventListener('change', e => {
   if (!key) return;
   settings[key] = el.type === 'checkbox' ? el.checked : el.type === 'range' ? Number(el.value) : el.value.trim();
   saveSettings();
-  if (key === 'rate') { render(); speak('あいうえお'); }
+  if (key === 'rate') { render(); speak('ゆっくり話してください'); }
+  if (key === 'furi') render();
 });
 
 // 주소 해시로 화면 바로 열기 (스크린샷 확인용)
-//   화면: #chart #words #settings #quizsetup   동작: #today #freequiz #confquiz #wordquiz   글자: #sheet=あ #write=あ
+//   화면: #sentences #my #chart #words #settings #quizsetup #myedit   상황: #cat=food
+//   동작: #study #listenquiz #orderquiz #kanatoday #freequiz #wordquiz   상세: #ss=문장 #big=문장 #sheet=あ #write=あ
 const hash = decodeURIComponent(location.hash.slice(1));
 const [hk, hv] = hash.split('=');
 if (hash) history.replaceState(null, '', location.pathname);
 if (VIEWS[hash]) go({ v: hash });
-else if ((hk === 'sheet' || hk === 'write') && BY[hv]) { go({ v: 'chart' }); hk === 'sheet' ? go({ v: 'chart', sheet: hv }) : ACT.write(hv); }
-else if (ACT[hash] && /quiz|today/.test(hash)) { render(); ACT[hash](); }
+else if (hk === 'cat' && CAT_INFO[hv]) go({ v: 'cat', id: hv });
+else if ((hk === 'ss' || hk === 'big') && SENT[hv]) { go({ v: 'sentences' }); over({ [hk]: hv }); }
+else if (hk === 'sheet' && BY[hv]) { go({ v: 'chart' }); over({ sheet: hv }); }
+else if (hk === 'write' && BY[hv]) { go({ v: 'chart' }); ACT.write(hv); }
+else if (ACT[hash] && /quiz|study|today/.test(hash)) { go({ v: 'home' }); ACT[hash](); }
 else render();
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js');
 </script>
