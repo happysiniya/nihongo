@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#d9482b">
+<meta name="theme-color" content="#1C2733">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
@@ -11,168 +11,240 @@
 <title>여행 일본어</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Klee+One:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=Klee+One:wght@600&display=swap">
 <style>
+  /* 디자인: 일본 기차 여행. 코스 = 노선, 상황 = 역, 오늘 배울 상황 = 지금 역 (역 이름 표지판) */
   :root {
-    --bg: #f7f3ec; --card: #fffdf9; --ink: #2b2a33; --muted: #7b7685; --line: #e8e1d5; --soft: #f1ebe1;
-    --accent: #d9482b; --accent-soft: #fbe7e1; --indigo: #34437a;
-    --ok: #23885a; --ok-bg: #dff3e8; --bad: #cf3e3e; --bad-bg: #fbe4e4; --mid: #e2a400; --mid-bg: #fdf3d6;
-    --guide: #e3dccf; --shadow: 0 1px 2px rgba(40,30,20,.06), 0 6px 18px rgba(40,30,20,.07);
+    --paper: #F2F4F6; --plate: #FFFFFF; --ink: #1C2733; --ink-2: #3A4654; --muted: #687482;
+    --hair: #DCE1E6; --soft: #E8ECF0;
+    --l0: #687482; --l1: #0A9A86; --l2: #EE7A00; --l3: #2E6CCF; --l4: #C0337F; /* 노선 색: 旅 遊 話 文 */
+    --line: var(--l0);
+    --ok: #1E9A55; --ok-bg: #E2F3E9; --bad: #D63B3B; --bad-bg: #FBE7E7; --mid: #DC9A00; --mid-bg: #FFF3D4;
+    --guide: #D8DEE4; --focus: #2E6CCF;
+    --r-lg: 14px; --r: 10px;
+    --kr: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --ja: "BIZ UDPGothic", "Yu Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --hand: "Klee One", "Yu Mincho", serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1b1a20; --card: #25242c; --ink: #ecebf0; --muted: #a29eac; --line: #393743; --soft: #2f2e37;
-      --accent: #ef6a4c; --accent-soft: #3d2620; --indigo: #a8b6ef;
-      --ok: #5fd39a; --ok-bg: #1d3a2c; --bad: #ff7d7d; --bad-bg: #452426; --mid: #f0c040; --mid-bg: #3d3420;
-      --guide: #3b3944; --shadow: none;
+      --paper: #13171C; --plate: #1C2229; --ink: #E7EBEF; --ink-2: #C3CAD2; --muted: #8B95A0;
+      --hair: #2D353F; --soft: #252C34;
+      --l1: #2CC4AB; --l2: #FF9B30; --l3: #5C93F2; --l4: #E35FA6;
+      --ok: #4CC983; --ok-bg: #173527; --bad: #FF7373; --bad-bg: #432325; --mid: #F2BE3A; --mid-bg: #3A3119;
+      --guide: #2D353F; --focus: #5C93F2;
     }
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { touch-action: manipulation; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-size: 17px; line-height: 1.5;
-    font-family: "Gowun Dodum", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; overscroll-behavior-y: contain; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--kr); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; }
   button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
   input, select, textarea { font: inherit; color: inherit; }
-  .jp { font-family: "Klee One", "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif; font-weight: 600; }
-  rt { font-size: .48em; color: var(--muted); font-weight: 400; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .jp { font-family: var(--ja); font-weight: 400; letter-spacing: .02em; }
+  rt { font-size: .5em; color: var(--muted); font-weight: 400; letter-spacing: .05em; }
   body.nofuri rt { display: none; }
-  h2 { font-size: 24px; margin: 6px 0 4px; }
-  h3 { font-size: 18px; margin: 0 0 10px; }
-  h4 { font-size: 15px; margin: 14px 0 8px; color: var(--muted); font-weight: normal; }
+  h2 { font-size: 24px; line-height: 1.3; margin: 8px 0 4px; font-weight: 700; letter-spacing: -.01em; }
+  h3 { font-size: 17px; margin: 0 0 10px; font-weight: 700; }
+  h4 { font-size: 14px; margin: 18px 0 8px; color: var(--muted); font-weight: 500; }
   p { margin: 6px 0; }
   .muted { color: var(--muted); }
-  .note { color: var(--muted); font-size: 14px; }
+  .note { color: var(--muted); font-size: 13px; }
 
   #view { max-width: 560px; margin: 0 auto;
-    padding: calc(14px + env(safe-area-inset-top)) 16px calc(96px + env(safe-area-inset-bottom)); }
+    padding: calc(14px + env(safe-area-inset-top)) 16px calc(92px + env(safe-area-inset-bottom)); }
   body.focus #view { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin: 12px 0; box-shadow: var(--shadow); }
+  .card { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); padding: 16px; margin: 12px 0; }
 
   /* 아래 탭 */
   .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; justify-content: center;
-    background: var(--card); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); }
+    background: var(--plate); border-top: 1px solid var(--hair); padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); }
   body.focus .tabs { display: none; }
-  .tabs button { flex: 1; max-width: 112px; border: 0; background: none; padding: 4px 0; font-size: 12px; color: var(--muted); line-height: 1.3; }
-  .tabs button b { display: block; font-size: 22px; font-weight: normal; filter: grayscale(1); opacity: .7; }
-  .tabs button.on { color: var(--accent); font-weight: bold; }
-  .tabs button.on b { filter: none; opacity: 1; }
+  .tabs button { position: relative; flex: 1; max-width: 112px; border: 0; background: none; padding: 8px 0 4px; font-size: 11px; color: var(--muted); line-height: 1.3; }
+  .tabs svg, .tabs .kana-ic { display: block; width: 24px; height: 24px; margin: 0 auto 2px; }
+  .tabs svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tabs .kana-ic { font: 700 20px/24px var(--ja); }
+  .tabs button.on { color: var(--ink); font-weight: 700; }
+  .tabs button.on::before { content: ""; position: absolute; top: -5px; left: 30%; right: 30%; height: 3px; border-radius: 0 0 3px 3px; background: var(--ink); }
+
+  svg.i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .listen svg.i { width: 52px; height: 52px; stroke-width: 1.5; }
+  .row-item .ic { display: grid; place-items: center; }
 
   /* 버튼 */
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--line);
-    background: var(--card); border-radius: 14px; padding: 12px 14px; font-size: 16px; min-height: 48px; }
-  .btn:active, .primary:active, .opt:active, .cell:active, .chunk:active, .srow:active { transform: scale(.97); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--hair);
+    background: var(--plate); border-radius: var(--r); padding: 11px 14px; font-size: 15px; min-height: 46px; }
+  .btn:active, .primary:active, .opt:active, .cell:active, .chunk:active, .row-item:active, .go:active { transform: scale(.98); }
   .btn.on { background: var(--mid-bg); border-color: var(--mid); }
+  .btn:disabled { opacity: .4; }
   .primary { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; border: 0;
-    background: var(--accent); color: #fff; border-radius: 18px; padding: 16px; font-size: 20px; font-weight: bold; min-height: 56px; }
-  .primary small { font-size: 14px; font-weight: normal; opacity: .92; margin-top: 2px; }
-  .primary.big { padding: 22px 16px; font-size: 23px; margin: 14px 0 4px; }
-  .primary.sub { background: var(--indigo); }
-  @media (prefers-color-scheme: dark) { .primary.sub { color: var(--bg); } }
+    background: var(--ink); color: var(--plate); border-radius: var(--r); padding: 14px 16px; font-size: 17px; font-weight: 700; min-height: 54px; }
+  .primary small { font-size: 13px; font-weight: 400; opacity: .8; margin-top: 2px; }
+  .primary.sub { background: var(--plate); color: var(--ink); border: 1.5px solid var(--ink); }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
   .row > .btn { flex: 1; }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; }
-  .chip { border: 1px solid var(--line); background: var(--soft); border-radius: 999px; padding: 8px 14px; font-size: 16px; }
-  .chip.on { background: var(--indigo); border-color: var(--indigo); color: var(--card); }
-  .back { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: var(--muted); padding: 6px 0; font-size: 16px; }
+  .chip { border: 1px solid var(--hair); background: var(--plate); border-radius: 999px; padding: 7px 14px; font-size: 15px; }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--plate); }
+  .back { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: var(--muted); padding: 6px 0; font-size: 15px; }
+
+  /* 기차표 (여행 D-day) */
+  .ticket { display: flex; align-items: stretch; background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r); cursor: pointer; }
+  .ticket .t-main { flex: 1; padding: 10px 14px; min-width: 0; }
+  .ticket .t-main small { display: block; font-size: 12px; color: var(--muted); }
+  .ticket .t-main b { display: block; font-size: 15px; font-weight: 500; }
+  .ticket .t-stub { display: flex; align-items: center; justify-content: center; min-width: 92px; padding: 10px 14px;
+    border-left: 2px dashed var(--hair); font-size: 22px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
+  .ticket.empty .t-stub { font-size: 14px; font-weight: 500; color: var(--focus); }
+
+  /* 역 이름 표지판 (駅名標) */
+  .sign { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); overflow: hidden; margin: 12px 0 0; }
+  .sign-plate { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; padding: 20px 18px 16px; }
+  .sign-name { display: flex; flex-direction: column; min-width: 0; }
+  .sign-jp { font: 700 42px/1.3 var(--ja); letter-spacing: .08em; }
+  .sign-jp rt { font-size: 13px; letter-spacing: .3em; }
+  .sign-ko { font-size: 16px; color: var(--ink-2); margin-top: 2px; }
+  .sign-band { display: flex; justify-content: space-between; gap: 12px; background: var(--line); color: #fff; font-size: 13px; font-weight: 500; padding: 7px 14px; }
+  .sign-band span:last-child { text-align: right; }
+  .sign.small .sign-plate { padding: 14px 16px 12px; gap: 14px; }
+  .sign.small .sign-jp { font-size: 32px; }
+  .sign-cap { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+
+  /* 역 번호 배지 */
+  .st { display: inline-grid; place-items: center; align-content: center; width: 44px; height: 44px; flex: none;
+    border: 4px solid var(--line); border-radius: 10px; background: var(--plate); line-height: 1.05; position: relative; z-index: 1; }
+  .st i { font: 700 11px var(--ja); font-style: normal; color: var(--line); }
+  .st b { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -.02em; }
+  .st.done { background: var(--line); }
+  .st.done i, .st.done b { color: #fff; }
+  .st.lg { width: 60px; height: 60px; border-width: 5px; border-radius: 12px; }
+  .st.lg i { font-size: 13px; }
+  .st.lg b { font-size: 23px; }
 
   /* 홈 */
-  .dday { background: linear-gradient(135deg, var(--accent), #e9784f); color: #fff; border-radius: 20px; padding: 18px 20px;
-    font-size: 18px; box-shadow: var(--shadow); }
-  .dday b { display: block; font-size: 40px; line-height: 1.1; letter-spacing: -1px; }
-  .dday.empty { background: var(--card); color: var(--ink); border: 1px dashed var(--muted); text-align: center; cursor: pointer; font-size: 16px; }
-  .dday.empty u { color: var(--accent); }
-  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; text-align: center; }
-  .stat b { display: block; font-size: 24px; }
-  .stat span { font-size: 14px; color: var(--muted); }
-  .prog { margin: 10px 0; }
-  .prog div { display: flex; justify-content: space-between; font-size: 15px; }
-  .bar { height: 10px; background: var(--soft); border-radius: 99px; overflow: hidden; margin-top: 4px; }
-  .bar i { display: block; height: 100%; background: var(--ok); border-radius: 99px; }
-  .shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-  .shortcuts button { display: flex; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--line);
-    background: var(--card); border-radius: 16px; padding: 14px 12px; font-size: 15px; line-height: 1.3; }
-  .shortcuts b { font-size: 26px; font-weight: normal; }
-  .shortcuts small { display: block; color: var(--muted); font-size: 13px; }
-  .done-today { text-align: center; color: var(--ok); margin: 6px 0 0; }
+  .go { display: flex; align-items: center; gap: 14px; width: 100%; margin: 12px 0 0; padding: 16px 18px; border: 0; border-radius: var(--r-lg);
+    background: var(--ink); color: var(--plate); text-align: left; }
+  .go span { flex: 1; }
+  .go b { display: block; font-size: 20px; }
+  .go small { display: block; font-size: 14px; opacity: .78; margin-top: 2px; }
+  .go svg { width: 40px; height: 40px; flex: none; }
+  .go.sub { background: var(--plate); color: var(--ink); border: 1.5px solid var(--ink); }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; margin: 18px 4px 0; }
+  .facts div + div { border-left: 1px solid var(--hair); padding-left: 16px; }
+  .facts b { display: block; font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .facts b small { font-size: 14px; color: var(--muted); font-weight: 400; }
+  .facts span { font-size: 13px; color: var(--muted); }
+  .sec-h { display: flex; justify-content: space-between; align-items: baseline; margin: 26px 2px 8px; }
+  .sec-h h3 { margin: 0; }
+  .sec-h small { font-size: 13px; color: var(--muted); }
 
-  /* 상황 목록 */
-  .cats { display: grid; gap: 8px; }
-  .catrow { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; text-align: left;
-    border: 1px solid var(--line); background: var(--card); border-radius: 16px; padding: 12px; }
-  .catrow .e { font-size: 30px; text-align: center; }
-  .catrow b { display: block; font-size: 17px; }
-  .catrow small { color: var(--muted); font-size: 13px; }
-  .catrow .n { font-size: 14px; color: var(--muted); text-align: right; min-width: 52px; }
-  .catrow .bar { height: 6px; margin-top: 6px; }
+  /* 노선도 (홈) */
+  .routes { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); padding: 2px 16px; }
+  .route { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: center; width: 100%; padding: 13px 0; border: 0; background: none; text-align: left; }
+  .route + .route { border-top: 1px solid var(--hair); }
+  .ln { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--line); color: #fff; font: 700 15px var(--ja); flex: none; }
+  .route-top { display: flex; justify-content: space-between; font-size: 14px; }
+  .route-top span:last-child { color: var(--muted); }
+  .track { position: relative; display: flex; justify-content: space-between; align-items: center; height: 14px; margin-top: 7px; }
+  .track::before { content: ""; position: absolute; left: 4px; right: 4px; top: 5px; height: 4px; background: var(--soft); border-radius: 2px; }
+  .track .fill { position: absolute; left: 4px; top: 5px; height: 4px; background: var(--line); border-radius: 2px; }
+  .track i { position: relative; width: 9px; height: 9px; border-radius: 50%; background: var(--plate); border: 2px solid var(--hair); }
+  .track i.p { border-color: var(--line); }
+  .track i.d { background: var(--line); border-color: var(--line); }
+  .track i.now { width: 14px; height: 14px; border: 3px solid var(--line); background: var(--plate); animation: now 2.4s ease-in-out infinite; }
+  @keyframes now { 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--line) 22%, transparent); } }
+  @media (prefers-reduced-motion: reduce) { .track i.now { animation: none; } }
 
-  h3.course { margin: 24px 0 10px; font-size: 19px; }
-  h3.course small { display: block; font-size: 14px; font-weight: normal; color: var(--muted); margin-top: 2px; }
+  /* 메뉴 목록 (하나의 판 안에 줄로) */
+  .menu { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); overflow: hidden; }
+  .row-item { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 13px 16px; border: 0; background: none; text-align: left; }
+  .row-item + .row-item { border-top: 1px solid var(--hair); }
+  .row-item .ic { font-size: 20px; text-align: center; }
+  .row-item b { display: block; font-size: 15px; font-weight: 500; }
+  .row-item small { display: block; font-size: 13px; color: var(--muted); }
+  .row-item .chev { color: var(--muted); font-size: 18px; }
+
+  /* 노선 (문장 탭) */
+  .course-h { display: flex; align-items: center; gap: 12px; margin: 28px 2px 10px; }
+  .course-h b { display: block; font-size: 17px; }
+  .course-h small { display: block; font-size: 13px; color: var(--muted); }
+  .stations { position: relative; background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); padding: 6px 0; }
+  .stations::before { content: ""; position: absolute; left: 35px; top: 30px; bottom: 30px; width: 6px; margin-left: -3px; background: var(--line); border-radius: 3px; }
+  .stn { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; width: 100%; padding: 9px 14px; border: 0; background: none; text-align: left; }
+  .stn b { display: block; font-size: 16px; font-weight: 500; }
+  .stn small { display: block; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .stn .n { font-size: 13px; color: var(--muted); text-align: right; min-width: 48px; font-variant-numeric: tabular-nums; }
+  .stn.here .nm::after { content: "오늘"; margin-left: 8px; padding: 1px 7px; border-radius: 99px; background: var(--line); color: #fff; font-size: 11px; font-weight: 700; vertical-align: 2px; }
+  .stations.solo::before { display: none; }
 
   /* 문장 줄 */
-  .slist { display: grid; gap: 8px; }
-  .srow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; text-align: left; width: 100%;
-    border: 1px solid var(--line); background: var(--card); border-radius: 14px; padding: 10px 12px; }
-  .srow .jp { display: block; font-size: 21px; line-height: 1.9; }
+  .slist { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); overflow: hidden; }
+  .srow { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; text-align: left; width: 100%;
+    border: 0; background: none; padding: 10px 14px; }
+  .srow + .srow { border-top: 1px solid var(--hair); }
+  .srow .jp { display: block; font-size: 19px; line-height: 1.9; }
   .srow small { display: block; color: var(--muted); font-size: 14px; line-height: 1.4; }
   .srow .mk { font-size: 13px; color: var(--muted); white-space: nowrap; }
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--line); vertical-align: 1px; }
-  .dot.l1 { background: var(--mid); }
-  .dot.l2 { background: var(--ok); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--hair); vertical-align: 1px; }
+  .dot.l1 { background: var(--mid); border-color: var(--mid); }
+  .dot.l2 { background: var(--ok); border-color: var(--ok); }
   .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
-  .actions .btn { flex-direction: column; gap: 2px; font-size: 14px; padding: 10px 4px; }
-  .actions .btn b { font-size: 22px; font-weight: normal; }
+  .actions .btn { flex-direction: column; gap: 2px; font-size: 13px; padding: 10px 4px; }
+  .actions .btn b { font-size: 20px; font-weight: 400; }
+  .actions .btn:first-child { background: var(--ink); color: var(--plate); border-color: var(--ink); }
 
   /* 문자표 */
-  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); border-radius: 14px; padding: 4px; margin: 8px 0 4px; }
-  .seg button { border: 0; background: none; border-radius: 10px; padding: 10px; font-size: 17px; }
-  .seg button.on { background: var(--card); box-shadow: var(--shadow); font-weight: bold; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); border-radius: var(--r); padding: 3px; margin: 8px 0 4px; }
+  .seg button { border: 0; background: none; border-radius: 8px; padding: 9px; font-size: 15px; }
+  .seg button.on { background: var(--plate); font-weight: 700; box-shadow: 0 0 0 1px var(--hair); }
   .kgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
   .kgrid.three { grid-template-columns: repeat(3, 1fr); }
-  .cell { position: relative; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 6px 0 4px; text-align: center; min-height: 64px; }
-  .cell .jp { display: block; font-size: 30px; line-height: 1.2; }
-  .kgrid.three .cell .jp { font-size: 26px; }
-  .cell small { display: block; font-size: 13px; color: var(--muted); }
+  .cell { position: relative; border: 1px solid var(--hair); background: var(--plate); border-radius: var(--r); padding: 6px 0 4px; text-align: center; min-height: 62px; }
+  .cell .jp { display: block; font: 600 28px/1.25 var(--hand); }
+  .kgrid.three .cell .jp { font-size: 24px; }
+  .cell small { display: block; font-size: 12px; color: var(--muted); }
   .cell.empty { border: 0; background: none; }
-  .cell.lv1::after, .cell.lv2::after { content: ""; position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--mid); }
+  .cell.lv1::after, .cell.lv2::after { content: ""; position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--mid); }
   .cell.lv2::after { background: var(--ok); }
-  .legend { display: flex; gap: 14px; font-size: 13px; color: var(--muted); margin: 8px 0; flex-wrap: wrap; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin: 8px 0; flex-wrap: wrap; }
   .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
 
   /* 아래에서 올라오는 상세 */
   #sheet { position: fixed; inset: 0; z-index: 10; display: none; }
   #sheet.open { display: block; }
-  .sheet-bg { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+  .sheet-bg { position: absolute; inset: 0; background: rgba(12, 18, 26, .5); }
   .sheet-card { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; max-height: 92vh; overflow-y: auto; margin: 0 auto;
-    background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); text-align: center; animation: up .2s ease-out; }
+    background: var(--plate); border-radius: 18px 18px 0 0; padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); text-align: center; animation: up .22s ease-out; }
   @keyframes up { from { transform: translateY(40px); opacity: 0; } }
-  .xbtn { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--soft); font-size: 20px; }
-  .sk { font-size: 110px; line-height: 1.15; cursor: pointer; }
-  .sl { font-size: 30px; font-weight: bold; }
-  .sl span { font-size: 18px; color: var(--muted); font-weight: normal; margin-left: 6px; }
-  .tip { background: var(--soft); border-radius: 12px; padding: 10px 12px; font-size: 15px; margin: 12px 0; text-align: left; }
-  .pairline { color: var(--muted); font-size: 15px; margin: 6px 0 14px; }
-  .pairline .jp { font-size: 22px; color: var(--ink); margin-left: 4px; }
-  .sjp { font-size: 28px; line-height: 2.1; margin: 22px 0 0; cursor: pointer; word-break: keep-all; overflow-wrap: anywhere; }
-  .skana { color: var(--muted); font-size: 16px; }
-  .sko { font-size: 19px; margin: 4px 0 0; }
-  .others { text-align: left; margin: 12px 0; }
-  .others h5 { margin: 0 0 6px; font-size: 14px; color: var(--muted); font-weight: normal; }
-  .other { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--soft); border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; }
-  .other .jp { font-size: 18px; line-height: 1.9; }
-  .other small { display: block; color: var(--muted); font-size: 14px; }
+  @media (prefers-reduced-motion: reduce) { .sheet-card { animation: none; } }
+  .xbtn { position: absolute; top: 12px; right: 12px; width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--soft); font-size: 18px; }
+  .sk { font: 600 104px/1.15 var(--hand); cursor: pointer; }
+  .sl { font-size: 28px; font-weight: 700; }
+  .sl span { font-size: 17px; color: var(--muted); font-weight: 400; margin-left: 6px; }
+  .tip { background: var(--soft); border-radius: var(--r); padding: 10px 12px; font-size: 14px; margin: 12px 0; text-align: left; }
+  .pairline { color: var(--muted); font-size: 14px; margin: 6px 0 14px; }
+  .pairline .jp { font: 600 22px var(--hand); color: var(--ink); margin-left: 4px; }
+  .sjp { font-size: 27px; line-height: 2.05; margin: 20px 0 0; cursor: pointer; word-break: keep-all; overflow-wrap: anywhere; }
+  .skana { color: var(--muted); font-size: 15px; }
+  .sko { font-size: 17px; margin: 4px 0 0; color: var(--ink-2); }
+  .others { text-align: left; margin: 14px 0; }
+  .others h5 { margin: 0 0 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+  .other { display: block; width: 100%; text-align: left; border: 0; border-left: 3px solid var(--hair); background: none; padding: 4px 12px; margin-bottom: 8px; }
+  .other .jp { font-size: 17px; line-height: 1.9; }
+  .other small { display: block; color: var(--muted); font-size: 13px; }
   .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
-  .tools .btn { flex-direction: column; gap: 0; font-size: 13px; padding: 8px 2px; min-height: 60px; }
-  .tools .btn b { font-size: 22px; font-weight: normal; }
+  .tools .btn { flex-direction: column; gap: 0; font-size: 12px; padding: 8px 2px; min-height: 58px; }
+  .tools .btn b { font-size: 20px; font-weight: 400; }
   #srres:empty { display: none; }
-  #srres { background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-top: 10px; font-size: 15px; text-align: left; }
-  #srres .jp { font-size: 18px; }
+  #srres { background: var(--soft); border-radius: var(--r); padding: 10px 12px; margin-top: 10px; font-size: 14px; text-align: left; }
+  #srres .jp { font-size: 17px; }
+  .qtitle { text-align: center; color: var(--muted); font-size: 13px; }
 
   /* 크게 보여주기 */
   #big { position: fixed; inset: 0; z-index: 20; display: none; background: #fff; color: #111; padding: 24px;
     flex-direction: column; align-items: center; justify-content: center; text-align: center; }
   #big.open { display: flex; }
-  #big .jp { font-size: clamp(30px, 8.5vw, 64px); line-height: 2; word-break: keep-all; overflow-wrap: anywhere; }
+  #big .jp { font-size: clamp(30px, 8.5vw, 64px); line-height: 2; word-break: keep-all; overflow-wrap: anywhere; font-weight: 700; }
   #big rt { color: #777; }
   #big p { color: #666; font-size: 18px; }
   #big small { position: absolute; bottom: calc(20px + env(safe-area-inset-bottom)); color: #999; }
@@ -180,102 +252,105 @@
   /* 퀴즈 */
   .qtop { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .qtop .bar { flex: 1; margin: 0; }
-  .qtop span { font-size: 15px; color: var(--muted); min-width: 44px; text-align: right; }
-  .icon { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--soft); font-size: 20px; flex: none; }
-  .qtitle { text-align: center; color: var(--muted); font-size: 15px; }
-  .qkana { text-align: center; font-size: 120px; line-height: 1.2; margin: 12px 0 0; cursor: pointer; }
-  .qkana.word { font-size: clamp(40px, 13vw, 64px); margin: 34px 0 18px; word-break: keep-all; }
-  .listen { display: block; margin: 26px auto 14px; width: 130px; height: 130px; border-radius: 50%; border: 0;
-    background: var(--accent-soft); font-size: 56px; }
+  .qtop span { font-size: 14px; color: var(--muted); min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+  .bar { height: 6px; background: var(--soft); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+  .bar i { display: block; height: 100%; background: var(--ink); border-radius: 99px; transition: width .3s; }
+  .icon { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--soft); font-size: 18px; flex: none; }
+  .qkana { text-align: center; font: 600 116px/1.2 var(--hand); margin: 12px 0 0; cursor: pointer; }
+  .qkana.word { font: 400 clamp(38px, 12vw, 60px)/1.3 var(--ja); margin: 34px 0 18px; word-break: keep-all; }
+  .listen { display: block; margin: 26px auto 14px; width: 120px; height: 120px; border-radius: 50%; border: 0;
+    background: var(--ink); color: var(--plate); font-size: 48px; }
   .hint { text-align: center; color: var(--muted); margin: 0 0 14px; }
-  .hint .jp { color: var(--ink); font-size: 22px; line-height: 2; }
-  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hint .jp { color: var(--ink); font-size: 21px; line-height: 2; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .opts.wide { grid-template-columns: 1fr; }
-  .opt { border: 2px solid var(--line); background: var(--card); border-radius: 16px; padding: 14px 8px; font-size: 26px; min-height: 76px; font-weight: bold; }
-  .opt small { display: block; font-size: 14px; color: var(--muted); font-weight: normal; }
-  .opt .jp { font-size: 40px; }
-  .opt.wordopt { font-size: 18px; }
-  .opt.wordopt b { display: block; font-size: 30px; font-weight: normal; }
-  .opts.wide .opt { font-size: 18px; min-height: 56px; padding: 12px; text-align: left; font-weight: normal; }
+  .opt { border: 1.5px solid var(--hair); background: var(--plate); border-radius: var(--r); padding: 14px 8px; font-size: 24px; min-height: 72px; font-weight: 700; }
+  .opt small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; }
+  .opt .jp { font: 600 38px var(--hand); }
+  .opt.wordopt { font-size: 16px; font-weight: 500; }
+  .opt.wordopt b { display: block; font-size: 28px; font-weight: 400; }
+  .opts.wide .opt { font-size: 16px; min-height: 54px; padding: 12px 14px; text-align: left; font-weight: 400; }
   .opt.ok { border-color: var(--ok); background: var(--ok-bg); }
   .opt.bad { border-color: var(--bad); background: var(--bad-bg); }
-  .opt.dim { opacity: .45; }
-  .feedback { text-align: center; margin: 14px 0 0; font-size: 18px; min-height: 28px; }
+  .opt.dim { opacity: .4; }
+  .feedback { text-align: center; margin: 14px 0 0; font-size: 17px; min-height: 26px; }
   .feedback.ok { color: var(--ok); }
   .feedback.bad { color: var(--bad); }
-  .result { text-align: center; padding-top: 20px; }
-  .result .score { font-size: 64px; font-weight: bold; line-height: 1.1; }
-  .unlock { background: var(--ok-bg); color: var(--ok); border-radius: 14px; padding: 12px; margin: 14px 0; font-size: 18px; }
+  .result { text-align: center; padding-top: 24px; }
+  .result .score { font-size: 60px; font-weight: 700; line-height: 1.1; letter-spacing: -.02em; }
+  .unlock { background: var(--ok-bg); color: var(--ok); border-radius: var(--r); padding: 12px; margin: 14px 0; font-size: 16px; }
   .wrongs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
-  .wrongs button { border: 1px solid var(--bad); background: var(--bad-bg); border-radius: 12px; padding: 4px 12px; font-size: 26px; }
-  .stack { display: grid; gap: 10px; margin-top: 18px; }
+  .wrongs button { border: 1px solid var(--bad); background: var(--bad-bg); border-radius: var(--r); padding: 4px 12px; font: 600 26px var(--hand); }
+  .stack { display: grid; gap: 8px; margin-top: 18px; }
+  .result .slist { text-align: left; }
 
   /* 문장 카드 */
-  .face { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px 18px; margin-top: 10px;
-    min-height: 300px; display: flex; flex-direction: column; justify-content: center; text-align: center; box-shadow: var(--shadow); }
-  .face .ko-front { font-size: 26px; font-weight: bold; line-height: 1.4; }
-  .face .ask { color: var(--muted); font-size: 15px; margin-top: 14px; }
+  .face { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); padding: 22px 18px; margin-top: 10px;
+    min-height: 290px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .face .ko-front { font-size: 24px; font-weight: 700; line-height: 1.45; }
+  .face .ask { color: var(--muted); font-size: 14px; margin-top: 14px; }
   .face .sjp { margin-top: 6px; }
-  .badge { display: inline-block; align-self: center; background: var(--mid-bg); color: var(--ink); border-radius: 99px; padding: 2px 12px; font-size: 13px; margin-bottom: 8px; }
+  .badge { display: inline-block; align-self: center; background: var(--mid-bg); color: var(--ink); border-radius: 99px; padding: 2px 12px; font-size: 12px; font-weight: 500; margin-bottom: 8px; }
   .grades { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
-  .grades button { border: 0; border-radius: 16px; padding: 12px 4px; font-size: 17px; font-weight: bold; min-height: 64px; }
-  .grades small { display: block; font-size: 12px; font-weight: normal; opacity: .85; }
+  .grades button { border: 0; border-radius: var(--r); padding: 12px 4px; font-size: 16px; font-weight: 700; min-height: 62px; }
+  .grades small { display: block; font-size: 12px; font-weight: 400; opacity: .85; }
   .g0 { background: var(--bad-bg); color: var(--bad); }
   .g1 { background: var(--mid-bg); color: var(--ink); }
   .g2 { background: var(--ok-bg); color: var(--ok); }
 
   /* 문장 조립 */
-  .oko { text-align: center; font-size: 22px; font-weight: bold; margin: 18px 0 6px; }
-  .oans { min-height: 76px; border: 2px dashed var(--line); border-radius: 16px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; margin: 12px 0; }
+  .oko { text-align: center; font-size: 21px; font-weight: 700; margin: 18px 0 6px; }
+  .oans { min-height: 74px; border: 1.5px dashed var(--hair); border-radius: var(--r-lg); padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; margin: 12px 0; background: var(--plate); }
   .oans.ok { border-color: var(--ok); background: var(--ok-bg); border-style: solid; }
   .oans.bad { border-color: var(--bad); background: var(--bad-bg); border-style: solid; }
   .opool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .chunk { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 4px 12px; font-size: 21px; line-height: 1.9; box-shadow: var(--shadow); }
+  .chunk { border: 1px solid var(--hair); border-bottom-width: 3px; background: var(--plate); border-radius: var(--r); padding: 4px 12px; font-size: 20px; line-height: 1.9; }
   .chunk.used { visibility: hidden; }
 
   /* 새 글자 소개 */
   .intro { text-align: center; }
-  .intro .sk { font-size: 150px; margin-top: 10px; }
+  .intro .sk { font-size: 144px; margin-top: 10px; }
 
   /* 따라 쓰기 */
-  .wbox { position: relative; width: min(100%, 380px); aspect-ratio: 1; margin: 6px auto; background: var(--card);
-    border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
-    background-image: linear-gradient(var(--line), var(--line)), linear-gradient(var(--line), var(--line));
+  .wbox { position: relative; width: min(100%, 380px); aspect-ratio: 1; margin: 6px auto; background: var(--plate);
+    border: 1px solid var(--hair); border-radius: var(--r-lg); overflow: hidden;
+    background-image: linear-gradient(var(--hair), var(--hair)), linear-gradient(var(--hair), var(--hair));
     background-size: 100% 1px, 1px 100%; background-position: center; background-repeat: no-repeat; }
   .wguide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--guide);
-    font-size: 260px; line-height: 1; pointer-events: none; }
+    font: 600 260px/1 var(--hand); pointer-events: none; }
   .wbox.long .wguide { font-size: 150px; }
   .wguide.hidden { visibility: hidden; }
   #pad { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
-  .wlabel { text-align: center; font-size: 22px; font-weight: bold; }
-  .wctl { display: grid; grid-template-columns: 56px 1fr 1fr 1fr 56px; gap: 8px; margin-top: 10px; }
-  .wctl .btn { padding: 10px 4px; font-size: 15px; }
+  .wlabel { text-align: center; font-size: 21px; font-weight: 700; }
+  .wctl { display: grid; grid-template-columns: 52px 1fr 1fr 1fr 52px; gap: 6px; margin-top: 10px; }
+  .wctl .btn { padding: 10px 4px; font-size: 14px; }
 
-  /* 단어 */
-  .wlist { display: grid; gap: 8px; }
-  .wrow { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 10px; text-align: left;
-    border: 1px solid var(--line); background: var(--card); border-radius: 14px; padding: 10px 12px; }
-  .wrow .e { font-size: 28px; text-align: center; }
-  .wrow .jp { font-size: 22px; display: block; line-height: 1.3; }
-  .wrow small { color: var(--muted); font-size: 14px; }
-  .wrow .m { font-size: 15px; color: var(--muted); }
-  details.card summary { font-weight: bold; cursor: pointer; }
-  .rule { display: grid; grid-template-columns: 64px 1fr; gap: 6px 10px; align-items: baseline; margin-top: 12px; font-size: 15px; }
-  .rule .jp { font-size: 26px; text-align: center; color: var(--accent); }
+  /* 가타카나 단어 */
+  .wlist { background: var(--plate); border: 1px solid var(--hair); border-radius: var(--r-lg); overflow: hidden; }
+  .wrow { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 10px; text-align: left; width: 100%;
+    border: 0; background: none; padding: 10px 14px; }
+  .wrow + .wrow { border-top: 1px solid var(--hair); }
+  .wrow .e { font-size: 24px; text-align: center; }
+  .wrow .jp { font-size: 20px; display: block; line-height: 1.3; }
+  .wrow small { color: var(--muted); font-size: 13px; }
+  .wrow .m { font-size: 14px; color: var(--muted); }
+  details.card summary { font-weight: 700; cursor: pointer; }
+  .rule { display: grid; grid-template-columns: 64px 1fr; gap: 6px 10px; align-items: baseline; margin-top: 12px; font-size: 14px; }
+  .rule .jp { font-size: 24px; text-align: center; color: var(--l3); }
 
   /* 입력 */
   label.field { display: block; margin: 12px 0; }
-  label.field span { display: block; font-size: 15px; color: var(--muted); margin-bottom: 4px; }
-  label.field input[type=text], label.field input[type=date], label.field textarea { width: 100%; padding: 12px; border: 1px solid var(--line);
-    border-radius: 12px; background: var(--bg); font-size: 17px; }
+  label.field span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  label.field input[type=text], label.field input[type=date], label.field textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--hair);
+    border-radius: var(--r); background: var(--paper); font-size: 16px; }
   label.field textarea { min-height: 70px; resize: vertical; }
-  label.field .jp { font-size: 20px; }
+  label.field .jp { font-size: 19px; }
   label.check { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
-  label.check input { width: 22px; height: 22px; accent-color: var(--accent); }
-  input[type=range] { width: 100%; accent-color: var(--accent); }
-  .voice { font-size: 15px; padding: 10px 12px; border-radius: 12px; background: var(--soft); margin: 8px 0; }
+  label.check input { width: 20px; height: 20px; accent-color: var(--ink); }
+  input[type=range] { width: 100%; accent-color: var(--ink); }
+  .voice { font-size: 14px; padding: 10px 12px; border-radius: var(--r); background: var(--soft); margin: 8px 0; }
   .voice.warn { background: var(--bad-bg); }
-  .empty-box { text-align: center; color: var(--muted); padding: 30px 10px; border: 1px dashed var(--line); border-radius: 16px; margin: 12px 0; }
+  .empty-box { text-align: center; color: var(--muted); padding: 30px 14px; border: 1.5px dashed var(--hair); border-radius: var(--r-lg); margin: 12px 0; }
 </style>
 </head>
 <body>
@@ -283,11 +358,11 @@
 <div id="sheet"></div>
 <div id="big" data-act="back"></div>
 <nav class="tabs">
-  <button data-act="tab" data-arg="home"><b>🏠</b>홈</button>
-  <button data-act="tab" data-arg="sentences"><b>💬</b>문장</button>
-  <button data-act="tab" data-arg="my"><b>📝</b>내 문장</button>
-  <button data-act="tab" data-arg="chart"><b>あ</b>글자</button>
-  <button data-act="tab" data-arg="settings"><b>⚙️</b>설정</button>
+  <button data-act="tab" data-arg="home"><svg viewBox="0 0 24 24"><path d="M4 11 12 4.5 20 11v8.5a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>홈</button>
+  <button data-act="tab" data-arg="sentences"><svg viewBox="0 0 24 24"><path d="M5 4.5h14a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1h-8.5L6 19.5V16H5a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M8 9h8M8 12h5"/></svg>문장</button>
+  <button data-act="tab" data-arg="my"><svg viewBox="0 0 24 24"><path d="M6 3.5h8.5l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7H18M9 11.5h6M9 15h6"/></svg>내 문장</button>
+  <button data-act="tab" data-arg="chart"><span class="kana-ic">あ</span>글자</button>
+  <button data-act="tab" data-arg="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>설정</button>
 </nav>
 <script src="data.js"></script>
 <script src="sentences.js"></script>
@@ -368,7 +443,7 @@ const SENT = {}, BUILTIN = [];
 function mkSent(cat, markup, ko, note, others) {
   const plain = markup.replace(KANJI, '$1').replace(/\//g, '');
   const parts = markup.split('/');
-  return { id: plain, cat, plain, ko, note: note || '', kana: '',
+  return { id: plain, cat, plain, ko, note: note || '', noteHTML: rubyHTML(note || ''), kana: '',
     html: rubyHTML(markup.replace(/\//g, '')),
     chunks: parts.length >= 3 ? parts.map(c => ({ html: rubyHTML(c), plain: c.replace(KANJI, '$1') })) : null,
     others: (others || []).map(([m, k]) => ({ html: rubyHTML(m.replace(/\//g, '')), plain: m.replace(KANJI, '$1').replace(/\//g, ''), ko: k })) };
@@ -382,7 +457,7 @@ function buildMy() {
   for (const s of MYS) delete SENT[s.id];
   MYS = my.map(e => {
     const parts = e.jp.trim().split(/\s+/);
-    const s = { id: e.id, cat: 'my', my: true, plain: e.jp.replace(/\s+/g, ''), kana: e.kana || '', ko: e.ko, note: e.note || '',
+    const s = { id: e.id, cat: 'my', my: true, plain: e.jp.replace(/\s+/g, ''), kana: e.kana || '', ko: e.ko, note: e.note || '', noteHTML: esc(e.note || ''),
       html: esc(e.jp.replace(/\s+/g, '')), others: [],
       chunks: parts.length >= 3 ? parts.map(p => ({ html: esc(p), plain: p })) : null };
     SENT[s.id] = s;
@@ -573,86 +648,158 @@ const a = s => esc(s); // data-arg 값
 // ---------- 화면들 ----------
 const VIEWS = {};
 
-function ddayHTML() {
-  if (!settings.trip) return `<div class="dday empty" data-act="tab" data-arg="settings">✈️ 여행 날짜를 정하면 D-day를 보여 드려요 · <u>정하기</u></div>`;
-  const n = Math.round((new Date(settings.trip + 'T00:00') - new Date(today() + 'T00:00')) / 86400000);
-  const place = esc(settings.place || '일본');
-  if (n > 0) return `<div class="dday">✈️ ${place} 여행까지<b>D-${n}</b></div>`;
-  if (n === 0) return `<div class="dday">🎌 ${place} 여행 출발!<b>D-DAY</b></div>`;
-  return `<div class="dday empty" data-act="tab" data-arg="settings">🧳 ${place} 여행은 즐거우셨나요? 다음 여행 날짜를 정해 보세요 · <u>정하기</u></div>`;
+// ---------- 노선도 디자인 부품 ----------
+// 코스 = 노선 (한 글자 이름), 상황 = 역, 역 이름표에는 상황의 일본어 이름을 보여 줘요. [표기, 읽기]
+const LINE = { 1: '旅', 2: '遊', 3: '話', 4: '文' };
+const CAT_JP = {
+  my: ['メモ'], fav: ['お気に入り'],
+  class: ['授業', 'じゅぎょう'], basic: ['挨拶', 'あいさつ'], intro: ['自己紹介', 'じこしょうかい'], pattern: ['文型', 'ぶんけい'],
+  airport: ['空港', 'くうこう'], hotel: ['ホテル'], food: ['食堂', 'しょくどう'], cafe: ['コンビニ'], move: ['交通', 'こうつう'],
+  shop: ['買い物', 'かいもの'], sos: ['緊急', 'きんきゅう'],
+  number: ['数字', 'すうじ'], onsen: ['温泉', 'おんせん'], sight: ['観光', 'かんこう'], izakaya: ['居酒屋', 'いざかや'],
+  eat2: ['注文', 'ちゅうもん'], talk: ['世間話', 'せけんばなし'], train2: ['電車', 'でんしゃ'], shop2: ['お土産', 'おみやげ'],
+  help: ['お願い', 'おねがい'], hotel2: ['宿', 'やど'], react: ['相槌', 'あいづち'],
+  family: ['家族', 'かぞく'], work: ['仕事', 'しごと'], daily: ['毎日', 'まいにち'], hobby: ['趣味', 'しゅみ'], food3: ['料理', 'りょうり'],
+  house: ['住まい', 'すまい'], season: ['季節', 'きせつ'], health: ['健康', 'けんこう'], travel3: ['旅行', 'りょこう'],
+  study: ['勉強', 'べんきょう'], feel: ['気持ち', 'きもち'], plans: ['予定', 'よてい'], ent: ['娯楽', 'ごらく'], korea: ['韓国', 'かんこく'],
+  memory: ['思い出', 'おもいで'], opinion: ['意見', 'いけん'], chores: ['家事', 'かじ'], phone: ['連絡', 'れんらく'], polite: ['お礼', 'おれい'],
+  'g-noun': ['名詞', 'めいし'], 'g-adj': ['形容詞', 'けいようし'], 'g-masu': ['ます形', 'ますけい'], 'g-te': ['て形', 'てけい'],
+  'g-want': ['希望', 'きぼう'], 'g-may': ['許可', 'きょか'], 'g-exp': ['経験', 'けいけん'], 'g-can': ['可能', 'かのう'],
+  'g-because': ['理由', 'りゆう'], 'g-time': ['時', 'とき'], 'g-if': ['条件', 'じょうけん'], 'g-guess': ['推量', 'すいりょう'],
+  'g-compare': ['比較', 'ひかく'], 'g-give': ['授受', 'じゅじゅ'], 'g-will': ['意志', 'いし'], 'g-must': ['義務', 'ぎむ'],
+};
+const courseSents = id => BUILTIN.filter(s => CAT_INFO[s.cat].course === id);
+const learnedIn = list => list.filter(s => srs[s.id]).length;
+
+const IC = {
+  speak: '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.2 6.5a7.5 7.5 0 0 1 0 11"/>',
+  slow: '<circle cx="12" cy="12.5" r="8"/><path d="M12 8v4.5l3 2"/>',
+  mic: '<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>',
+  star: '<path d="M12 3.8l2.5 5.1 5.6.8-4 3.9.9 5.6-5-2.6-5 2.6.9-5.6-4-3.9 5.6-.8z"/>',
+  starOn: '<path d="M12 3.8l2.5 5.1 5.6.8-4 3.9.9 5.6-5-2.6-5 2.6.9-5.6-4-3.9 5.6-.8z" fill="currentColor"/>',
+  big: '<rect x="6.5" y="3" width="11" height="18" rx="2"/><path d="M10.5 17.5h3"/>',
+  card: '<rect x="4" y="6" width="12.5" height="15" rx="2"/><path d="M8 3h10.5A1.5 1.5 0 0 1 20 4.5V17"/>',
+  listen: '<path d="M4.5 15.5V12a7.5 7.5 0 0 1 15 0v3.5"/><rect x="3.5" y="14" width="4" height="6.5" rx="1.5"/><rect x="16.5" y="14" width="4" height="6.5" rx="1.5"/>',
+  order: '<rect x="3" y="5.5" width="7.5" height="5.5" rx="1.2"/><rect x="13" y="5.5" width="8" height="5.5" rx="1.2"/><rect x="3" y="14" width="11" height="5.5" rx="1.2"/>',
+  edit: '<path d="M4.5 19.5l1-4.2L15.8 5a1.8 1.8 0 0 1 2.6 0l.6.6a1.8 1.8 0 0 1 0 2.6L8.7 18.5z"/><path d="M13.8 7l3.2 3.2"/>',
+};
+const ic = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
+const PLAY = `<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="currentColor" opacity=".16"/><path d="M16 12.5 28 20l-12 7.5z" fill="currentColor"/></svg>`;
+
+// 지금 서 있는 역: 오늘 배울 새 문장의 상황, 없으면 다음에 배울 상황
+function hereCat(fresh) {
+  if (fresh && fresh.length) return fresh[0].cat;
+  const next = allSents().find(s => !srs[s.id]);
+  return next ? next.cat : CATEGORIES[CATEGORIES.length - 1].id;
 }
+function badge(id, cls = '') {
+  const c = CAT_INFO[id], list = catSents(id);
+  if (!c.course) return `<span class="st ${cls}"><i></i><b>${id === 'fav' ? '★' : '✎'}</b></span>`;
+  const no = CATEGORIES.filter(x => x.course === c.course).findIndex(x => x.id === id) + 1;
+  const done = list.length && learnedIn(list) === list.length;
+  return `<span class="st ${cls} ${done ? 'done' : ''}" style="--line:var(--l${c.course})"><i>${LINE[c.course]}</i><b>${String(no).padStart(2, '0')}</b></span>`;
+}
+function signHTML(id, small) {
+  const c = CAT_INFO[id], [jp, yomi] = CAT_JP[id] || [c.name];
+  const same = c.course ? CATEGORIES.filter(x => x.course === c.course) : [];
+  const i = same.findIndex(x => x.id === id), prev = same[i - 1], next = same[i + 1];
+  const band = c.course
+    ? `<span>${prev ? '◀ ' + prev.name : '출발역'}</span><span>${next ? next.name + ' ▶' : '종점'}</span>`
+    : `<span>${c.desc}</span>`;
+  return `<div class="sign ${small ? 'small' : ''}" style="--line:var(--l${c.course || 0})">
+    <div class="sign-plate">${badge(id, 'lg')}
+      <div class="sign-name"><span class="sign-jp" lang="ja">${yomi ? `<ruby>${jp}<rt>${yomi}</rt></ruby>` : jp}</span><span class="sign-ko">${c.name}</span></div>
+    </div>
+    <div class="sign-band">${band}</div>
+  </div>`;
+}
+function ticketHTML() {
+  const t = settings.trip, place = esc(settings.place || '일본');
+  if (!t) return `<div class="ticket empty" data-act="tab" data-arg="settings"><div class="t-main"><small>여행 날짜</small><b>정하면 출발까지 남은 날을 보여 드려요</b></div><div class="t-stub">날짜 정하기</div></div>`;
+  const d = new Date(t + 'T00:00'), n = Math.round((d - new Date(today() + 'T00:00')) / 86400000);
+  const md = `${d.getMonth() + 1}월 ${d.getDate()}일`;
+  const main = n >= 0 ? `<small>${md} 출발</small><b>${place} 여행</b>` : `<small>${md}에 다녀온 ${place} 여행</small><b>다음 여행 날짜를 정해 보세요</b>`;
+  return `<div class="ticket" data-act="tab" data-arg="settings"><div class="t-main">${main}</div><div class="t-stub">${n > 0 ? 'D-' + n : n === 0 ? 'D-DAY' : '다녀옴'}</div></div>`;
+}
+function routeHTML(co, here) {
+  const cats = CATEGORIES.filter(c => c.course === co.id), l = courseSents(co.id), n = learnedIn(l);
+  const dots = cats.map(c => {
+    const cl = catSents(c.id), k = learnedIn(cl);
+    return `<i class="${c.id === here ? 'now' : k === cl.length ? 'd' : k ? 'p' : ''}"></i>`;
+  }).join('');
+  return `<button class="route" style="--line:var(--l${co.id})" data-act="course" data-arg="${co.id}" aria-label="${co.name} ${n} / ${l.length}">
+    <span class="ln">${LINE[co.id]}</span>
+    <span><span class="route-top"><span>${co.name}</span><span>${n} / ${l.length}</span></span>
+      <span class="track"><span class="fill" style="width:calc((100% - 8px) * ${l.length ? n / l.length : 0})"></span>${dots}</span></span>
+  </button>`;
+}
+const rowItem = (act, arg, ic, title, desc) => `<button class="row-item" data-act="${act}" data-arg="${arg}"><span class="ic">${ic}</span><span><b>${title}</b><small>${desc}</small></span><span class="chev">›</span></button>`;
 
 VIEWS.home = () => {
   const { due, fresh } = plan(null);
-  const all = allSents();
-  const learned = all.filter(s => srs[s.id]).length, mastered = all.filter(s => sLevel(s.id) === 2).length;
-  const nothing = !due.length && !fresh.length;
+  const all = allSents(), learned = learnedIn(all), mastered = all.filter(s => sLevel(s.id) === 2).length;
+  const here = hereCat(fresh), left = all.length - learned;
+  const what = [due.length ? `복습 ${due.length}개` : '', fresh.length ? `새 문장 ${fresh.length}개` : ''].filter(Boolean).join(', ');
   return `
-    ${ddayHTML()}
-    ${nothing
-      ? `<button class="primary big sub" data-act="study" data-arg="more">새 문장 5개 더 배우기<small>오늘 할 분량은 다 했어요 🎉</small></button>`
-      : `<button class="primary big" data-act="study">오늘의 문장 학습<small>복습 ${due.length}개 · 새 문장 ${fresh.length}개${fresh.length ? ` · ${CAT_INFO[fresh[0].cat].e} ${CAT_INFO[fresh[0].cat].name}` : ''}</small></button>`}
-    <div class="stats">
-      <div class="stat"><b>🔥 ${streak()}일</b><span>연속 학습</span></div>
-      <div class="stat"><b>${learned}<span style="font-size:15px"> / ${all.length}</span></b><span>배운 문장 (외움 ${mastered})</span></div>
+    ${ticketHTML()}
+    ${signHTML(here)}
+    ${!due.length && !fresh.length
+      ? `<button class="go sub" data-act="study" data-arg="more"><span><b>새 문장 5개 더 배우기</b><small>오늘 분량은 다 끝냈어요</small></span>${PLAY}</button>`
+      : `<button class="go" data-act="study"><span><b>오늘 학습 시작</b><small>${what}</small></span>${PLAY}</button>`}
+    <div class="facts">
+      <div><b>${streak()}일</b><span>연속으로 공부했어요</span></div>
+      <div><b>${learned}<small> / ${all.length}</small></b><span>배운 문장 (외운 문장 ${mastered})</span></div>
     </div>
-    <div class="shortcuts">
-      <button data-act="listenquiz"><b>🎧</b><span>듣기 퀴즈<small>듣고 뜻 고르기</small></span></button>
-      <button data-act="orderquiz"><b>🧩</b><span>문장 조립<small>순서대로 맞추기</small></span></button>
-      <button data-act="myadd"><b>📝</b><span>내 문장 추가<small>수업에서 배운 것</small></span></button>
-      <button data-act="cat" data-arg="fav"><b>⭐</b><span>즐겨찾기<small>${favs.length}개</small></span></button>
-    </div>
-    <section class="card"><h3>코스 진도</h3>
-      ${COURSES.map(co => {
-        if (co.soon) return `<div class="prog muted"><div><span>${co.id}단계 · ${co.name}</span><span>준비 중</span></div><div class="bar"></div></div>`;
-        const l = courseSents(co.id), n = l.filter(s => srs[s.id]).length;
-        return `<div class="prog" data-act="tab" data-arg="sentences"><div><span>${co.id}단계 · ${co.name}</span><span class="muted">${n} / ${l.length}</span></div><div class="bar"><i style="width:${pct(n, l.length)}%"></i></div></div>`; }).join('')}
-      <p class="note">하루 ${settings.newPerDay}개씩이면 남은 ${allSents().filter(s => !srs[s.id]).length}문장을 약 ${Math.ceil(allSents().filter(s => !srs[s.id]).length / settings.newPerDay)}일 동안 배워요.</p>
-    </section>`;
+    <div class="sec-h"><h3>노선도</h3><small>${left ? `하루 ${settings.newPerDay}개씩 약 ${Math.ceil(left / settings.newPerDay)}일 남았어요` : '모든 역을 지났어요'}</small></div>
+    <div class="routes">${COURSES.map(co => routeHTML(co, here)).join('')}</div>
+    <div class="sec-h"><h3>다른 연습</h3></div>
+    <div class="menu">
+      ${rowItem('listenquiz', '', ic('listen'), '듣기 퀴즈', '배운 문장을 듣고 뜻 고르기')}
+      ${rowItem('orderquiz', '', ic('order'), '문장 조립', '조각을 순서대로 맞추기')}
+      ${rowItem('myadd', '', ic('edit'), '내 문장 추가', '수업에서 배운 문장 적기')}
+      ${rowItem('cat', 'fav', ic('star'), '즐겨찾기', favs.length ? `${favs.length}개, 여행 가서 바로 꺼내 보기` : '문장에서 ☆를 누르면 모여요')}
+    </div>`;
 };
-const courseSents = id => BUILTIN.filter(s => CAT_INFO[s.cat].course === id);
 
-const catRow = (c, list) => {
-  const n = list.filter(s => srs[s.id]).length;
-  return `<button class="catrow" data-act="cat" data-arg="${c.id}"><span class="e">${c.e}</span>
-    <span><b>${c.name}</b><small>${c.desc}</small><div class="bar"><i style="width:${pct(n, list.length)}%"></i></div></span>
-    <span class="n">${n} / ${list.length}</span></button>`;
+const stnRow = (c, here) => {
+  const list = catSents(c.id), n = learnedIn(list);
+  return `<button class="stn ${c.id === here ? 'here' : ''}" data-act="cat" data-arg="${c.id}">${badge(c.id)}
+    <span><b class="nm">${c.name}</b><small>${c.desc}</small></span><span class="n">${n} / ${list.length}</span></button>`;
 };
-VIEWS.sentences = () => `
-  <h2>상황별 문장</h2>
-  <p class="muted">상황을 고르면 문장을 듣고, 카드로 외우고, 퀴즈로 확인할 수 있어요.</p>
-  <div class="cats" style="margin-top:12px">
-    ${catRow(CAT_INFO.fav, catSents('fav'))}
-    ${MYS.length ? catRow(CAT_INFO.my, MYS) : ''}
-  </div>
+VIEWS.sentences = () => {
+  const here = hereCat(plan(null).fresh);
+  return `
+  <h2>문장</h2>
+  <p class="muted">노선을 따라 역마다 상황별 문장을 배워요. 역을 누르면 문장을 듣고 연습할 수 있어요.</p>
+  <div class="stations solo" style="margin-top:14px">${stnRow(CAT_INFO.fav)}${MYS.length ? stnRow(CAT_INFO.my) : ''}</div>
   ${COURSES.map(co => {
-    const cats = CATEGORIES.filter(c => c.course === co.id);
-    if (co.soon || !cats.length) return `<h3 class="course muted">${co.id}단계 · ${co.name}<small>준비 중 · ${co.desc}</small></h3>`;
-    const l = courseSents(co.id), n = l.filter(s => srs[s.id]).length;
-    return `<h3 class="course">${co.id}단계 · ${co.name}<small>${co.desc} · ${n} / ${l.length}</small></h3>
-      <div class="cats">${cats.map(c => catRow(c, catSents(c.id))).join('')}</div>`;
-  }).join('')}
-  <div class="legend" style="margin-top:12px"><span><i style="background:var(--mid)"></i>배우는 중</span><span><i style="background:var(--ok)"></i>외움</span></div>`;
+    const cats = CATEGORIES.filter(c => c.course === co.id), l = courseSents(co.id);
+    return `<div class="course-h" id="co-${co.id}" style="--line:var(--l${co.id})"><span class="ln">${LINE[co.id]}</span>
+      <span><b>${co.id}단계 ${co.name}</b><small>${co.desc}. ${learnedIn(l)} / ${l.length}문장</small></span></div>
+      <div class="stations" style="--line:var(--l${co.id})">${cats.map(c => stnRow(c, here)).join('')}</div>`;
+  }).join('')}`;
+};
 
 const sRow = s => `<button class="srow" data-act="ss" data-arg="${a(s.id)}">
     <span><span class="jp">${s.html}</span>${s.kana ? `<small>${esc(s.kana)}</small>` : ''}<small>${esc(s.ko)}</small></span>
-    <span class="mk">${favs.includes(s.id) ? '⭐ ' : ''}<i class="dot l${sLevel(s.id)}"></i></span></button>`;
+    <span class="mk">${favs.includes(s.id) ? '★ ' : ''}<i class="dot l${sLevel(s.id)}"></i></span></button>`;
 
 VIEWS.cat = () => {
   const c = CAT_INFO[route.id], list = catSents(route.id);
-  const canOrder = list.filter(s => s.chunks).length >= 1;
-  const empty = route.id === 'fav' ? '문장을 열고 ⭐를 누르면 여기에 모여요.<br>여행 가서 바로 꺼내 쓰기 좋아요.' : '아직 문장이 없어요.';
+  const canOrder = list.some(s => s.chunks);
+  const empty = route.id === 'fav' ? '문장을 열고 ☆를 누르면 여기에 모여요.<br>여행 가서 바로 꺼내 보기 좋아요.' : '아직 문장이 없어요.';
   return `
     <button class="back" data-act="back">◀ 뒤로</button>
-    <h2>${c.e} ${c.name}</h2>
-    <p class="muted">${c.desc}</p>
+    ${signHTML(c.id, true)}
+    ${c.course ? `<p class="muted" style="margin:10px 2px 0">${c.desc}</p>` : ''}
     ${list.length ? `
     <div class="actions">
-      <button class="btn" data-act="study" data-arg="cat:${c.id}"><b>🃏</b>카드 학습</button>
-      <button class="btn" data-act="listenquiz" data-arg="${c.id}" ${list.length < 2 ? 'disabled' : ''}><b>🎧</b>듣기 퀴즈</button>
-      <button class="btn" data-act="orderquiz" data-arg="${c.id}" ${canOrder ? '' : 'disabled'}><b>🧩</b>문장 조립</button>
+      <button class="btn" data-act="study" data-arg="cat:${c.id}">${ic('card')}카드 학습</button>
+      <button class="btn" data-act="listenquiz" data-arg="${c.id}" ${list.length < 2 ? 'disabled' : ''}>${ic('listen')}듣기 퀴즈</button>
+      <button class="btn" data-act="orderquiz" data-arg="${c.id}" ${canOrder ? '' : 'disabled'}>${ic('order')}문장 조립</button>
     </div>
-    <div class="slist">${list.map(sRow).join('')}</div>` : `<div class="empty-box">${empty}</div>`}`;
+    <div class="slist">${list.map(sRow).join('')}</div>
+    <div class="legend" style="margin:10px 2px"><span><i style="background:var(--mid)"></i>배우는 중</span><span><i style="background:var(--ok)"></i>외운 문장</span></div>` : `<div class="empty-box">${empty}</div>`}`;
 };
 
 function sentSheet(id) {
@@ -662,26 +809,26 @@ function sentSheet(id) {
   return `<div class="sheet-bg" data-act="back"></div>
     <div class="sheet-card">
       <button class="xbtn" data-act="back" aria-label="닫기">✕</button>
-      <div class="qtitle">${CAT_INFO[s.cat].e} ${CAT_INFO[s.cat].name}</div>
+      <div class="qtitle">${CAT_INFO[s.cat].name}</div>
       <div class="sjp jp" data-act="ssay" data-arg="${a(id)}">${s.html}</div>
       ${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}
       <div class="sko">${esc(s.ko)}</div>
-      ${s.note ? `<div class="tip">💡 ${esc(s.note)}</div>` : ''}
+      ${s.note ? `<div class="tip">${s.noteHTML}</div>` : ''}
       ${othersHTML(s)}
       <div class="tools">
-        <button class="btn" data-act="ssay" data-arg="${a(id)}"><b>🔊</b>듣기</button>
-        <button class="btn" data-act="sslow" data-arg="${a(id)}"><b>🐢</b>천천히</button>
-        <button class="btn" data-act="rec" data-arg="${a(id)}"><b>🎤</b>따라 말하기</button>
-        <button class="btn ${fav ? 'on' : ''}" data-act="fav" data-arg="${a(id)}"><b>${fav ? '⭐' : '☆'}</b>즐겨찾기</button>
-        <button class="btn" data-act="big" data-arg="${a(id)}"><b>📱</b>크게 보여주기</button>
-        ${s.my ? `<button class="btn" data-act="myedit" data-arg="${a(id)}"><b>✏️</b>고치기</button>`
-          : `<button class="btn" data-act="study" data-arg="one:${a(id)}"><b>🃏</b>카드로 연습</button>`}
+        <button class="btn" data-act="ssay" data-arg="${a(id)}">${ic('speak')}듣기</button>
+        <button class="btn" data-act="sslow" data-arg="${a(id)}">${ic('slow')}천천히</button>
+        <button class="btn" data-act="rec" data-arg="${a(id)}">${ic('mic')}따라 말하기</button>
+        <button class="btn ${fav ? 'on' : ''}" data-act="fav" data-arg="${a(id)}">${ic(fav ? 'starOn' : 'star')}즐겨찾기</button>
+        <button class="btn" data-act="big" data-arg="${a(id)}">${ic('big')}크게 보여주기</button>
+        ${s.my ? `<button class="btn" data-act="myedit" data-arg="${a(id)}">${ic('edit')}고치기</button>`
+          : `<button class="btn" data-act="study" data-arg="one:${a(id)}">${ic('card')}카드로 연습</button>`}
       </div>
       <div id="srres"></div>
       <p class="note">${st ? `맞힘 ${st.c}번 · 틀림 ${st.w}번 · 다음 복습 ${st.due <= today() ? '오늘' : st.due.slice(5).replace('-', '월 ') + '일'}` : '아직 카드로 배우지 않은 문장이에요'}</p>
     </div>`;
 }
-const othersHTML = s => s.others.length ? `<div class="others"><h5>💬 상대방이 하는 말</h5>${s.others.map(o =>
+const othersHTML = s => s.others.length ? `<div class="others"><h5>상대방이 하는 말</h5>${s.others.map(o =>
   `<button class="other" data-act="say" data-arg="${a(o.plain)}"><span class="jp">${o.html}</span><small>${esc(o.ko)}</small></button>`).join('')}</div>` : '';
 
 // --- 문장 카드 ---
@@ -691,19 +838,19 @@ VIEWS.cards = () => {
     <div class="bar"><i style="width:${pct(deck.done, total)}%"></i></div><span>${deck.queue.length + 1}개 남음</span></div>
     <div class="qtitle">${esc(deck.title)}</div>`;
   const tools = `<div class="tools">
-      <button class="btn" data-act="ssay" data-arg="${a(s.id)}"><b>🔊</b>듣기</button>
-      <button class="btn" data-act="sslow" data-arg="${a(s.id)}"><b>🐢</b>천천히</button>
-      <button class="btn" data-act="rec" data-arg="${a(s.id)}"><b>🎤</b>따라 말하기</button>
+      <button class="btn" data-act="ssay" data-arg="${a(s.id)}">${ic('speak')}듣기</button>
+      <button class="btn" data-act="sslow" data-arg="${a(s.id)}">${ic('slow')}천천히</button>
+      <button class="btn" data-act="rec" data-arg="${a(s.id)}">${ic('mic')}따라 말하기</button>
     </div><div id="srres"></div>`;
   const full = `<div class="sjp jp" data-act="ssay" data-arg="${a(s.id)}">${s.html}</div>
       ${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}<div class="sko">${esc(s.ko)}</div>
-      ${s.note ? `<div class="tip">💡 ${esc(s.note)}</div>` : ''}${othersHTML(s)}`;
-  if (cur.isNew) return `${top}<div class="face"><span class="badge">✨ 새 문장</span>${full}</div>${tools}
-    <div class="stack"><button class="primary" data-act="cardseen">확인했어요 · 다음</button></div>
+      ${s.note ? `<div class="tip">${s.noteHTML}</div>` : ''}${othersHTML(s)}`;
+  if (cur.isNew) return `${top}<div class="face"><span class="badge">새 문장</span>${full}</div>${tools}
+    <div class="stack"><button class="primary" data-act="cardseen">확인했어요</button></div>
     <p class="note" style="text-align:center">조금 뒤에 다시 나와서 기억나는지 확인해요.</p>`;
   if (!deck.flipped) {
     const front = cur.dir === 'jp'
-      ? `<div class="sjp jp" data-act="ssay" data-arg="${a(s.id)}">${s.html}</div>${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}<div class="ask">🔊 들어 보고, 무슨 뜻인지 떠올려 보세요</div>`
+      ? `<div class="sjp jp" data-act="ssay" data-arg="${a(s.id)}">${s.html}</div>${s.kana ? `<div class="skana">${esc(s.kana)}</div>` : ''}<div class="ask">들어 보고, 무슨 뜻인지 떠올려 보세요</div>`
       : `<div class="ko-front">${esc(s.ko)}</div><div class="ask">🗣️ 일본어로 소리 내어 말해 보세요</div>`;
     return `${top}<div class="face">${front}</div><div class="stack"><button class="primary" data-act="flip">정답 보기</button></div>`;
   }
@@ -720,7 +867,7 @@ VIEWS.deckdone = () => `<div class="result">
     <p class="muted">복습 ${deck ? deck.reviewed : 0}개 · 새 문장 ${deck ? deck.learned : 0}개</p>
     <p class="muted">${(() => { const t = allSents().filter(s => srs[s.id] && srs[s.id].due === addDays(1)).length; return t ? `내일 복습할 문장 ${t}개가 기다려요.` : ''; })()}</p>
     <div class="stack">
-      <button class="primary sub" data-act="listenquiz">🎧 배운 문장으로 듣기 퀴즈</button>
+      <button class="primary sub" data-act="listenquiz">배운 문장으로 듣기 퀴즈</button>
       <button class="btn" data-act="home">홈으로</button>
     </div></div>`;
 
@@ -753,9 +900,9 @@ VIEWS.my = () => `
   <button class="primary" style="margin:12px 0" data-act="myadd">+ 문장 추가</button>
   ${MYS.length ? `
     <div class="actions">
-      <button class="btn" data-act="study" data-arg="cat:my"><b>🃏</b>카드 학습</button>
-      <button class="btn" data-act="listenquiz" data-arg="my" ${MYS.length < 2 ? 'disabled' : ''}><b>🎧</b>듣기 퀴즈</button>
-      <button class="btn" data-act="orderquiz" data-arg="my" ${MYS.some(s => s.chunks) ? '' : 'disabled'}><b>🧩</b>문장 조립</button>
+      <button class="btn" data-act="study" data-arg="cat:my">${ic('card')}카드 학습</button>
+      <button class="btn" data-act="listenquiz" data-arg="my" ${MYS.length < 2 ? 'disabled' : ''}>${ic('listen')}듣기 퀴즈</button>
+      <button class="btn" data-act="orderquiz" data-arg="my" ${MYS.some(s => s.chunks) ? '' : 'disabled'}>${ic('order')}문장 조립</button>
     </div>
     <div class="slist">${MYS.map(sRow).join('')}</div>`
   : `<div class="empty-box">아직 적은 문장이 없어요.<br>오늘 수업에서 배운 문장 하나부터 적어 볼까요?</div>`}`;
@@ -770,9 +917,9 @@ VIEWS.myedit = () => {
       <label class="field"><span>읽는 법 (히라가나, 한자가 있을 때)</span><input type="text" id="f-kana" value="${esc(e.kana)}" placeholder="しゅうまつは なにを しましたか"></label>
       <label class="field"><span>한국어 뜻 *</span><input type="text" id="f-ko" value="${esc(e.ko)}" placeholder="주말에는 뭐 했어요?"></label>
       <label class="field"><span>메모 (선생님 설명, 문법 등)</span><textarea id="f-note">${esc(e.note)}</textarea></label>
-      <p class="note">💡 일본어를 띄어쓰기로 나눠 쓰면 (例: 週末は 何を しましたか) '문장 조립' 퀴즈에도 나와요. 화면에는 붙여서 보여요.</p>
+      <p class="note">일본어를 띄어쓰기로 나눠 쓰면 (例: 週末は 何を しましたか) '문장 조립' 퀴즈에도 나와요. 화면에는 붙여서 보여요.</p>
       <div class="stack">
-        <button class="btn" data-act="mytry">🔊 소리 들어 보기</button>
+        <button class="btn" data-act="mytry">${ic('speak')}소리 들어 보기</button>
         <button class="primary" data-act="mysave">저장</button>
         ${route.id ? `<button class="btn" style="color:var(--bad)" data-act="mydel">삭제</button>` : ''}
       </div>
@@ -788,10 +935,10 @@ VIEWS.quiz = () => {
       <p class="hint">${picked ? `${WBY[q.k].h} · ${WBY[q.k].e} ${WBY[q.k].ko}` : '무슨 뜻일까요?'}</p>`;
   else if (kind === 'sent') {
     optCls = 'wide';
-    prompt = `<button class="listen" data-act="ssay" data-arg="${a(q.k)}" aria-label="다시 듣기">🔊</button>
+    prompt = `<button class="listen" data-act="ssay" data-arg="${a(q.k)}" aria-label="다시 듣기">${ic('speak')}</button>
       <p class="hint">${picked ? `<span class="jp">${SENT[q.k].html}</span>` : '무슨 뜻일까요? (여러 번 들어도 돼요)'}</p>`;
   }
-  else if (q.mode === 'listen') prompt = `<button class="listen" data-act="say" data-arg="${q.k}" aria-label="다시 듣기">🔊</button>
+  else if (q.mode === 'listen') prompt = `<button class="listen" data-act="say" data-arg="${q.k}" aria-label="다시 듣기">${ic('speak')}</button>
       <p class="hint">${picked ? `<span class="jp" style="font-size:28px">${q.k}</span> ${BY[q.k].h}` : '들리는 글자를 고르세요'}</p>`;
   else prompt = `<div class="qkana jp" data-act="say" data-arg="${q.k}">${q.k}</div><p class="hint">어떻게 읽을까요?</p>`;
   const opts = q.opts.map(k => {
@@ -821,22 +968,22 @@ VIEWS.order = () => {
   return `
     <div class="qtop"><button class="icon" data-act="back" aria-label="그만하기">✕</button>
       <div class="bar"><i style="width:${pct(quiz.i, n)}%"></i></div><span>${quiz.i + 1}/${n}</span></div>
-    <div class="qtitle">${esc(quiz.title)} · 조각을 순서대로 누르세요</div>
-    <div class="oko">${esc(s.ko)}</div>
+    <div class="qtitle">${esc(quiz.title)}</div>
+    <div class="oko">${esc(s.ko)}</div><p class="hint">조각을 순서대로 눌러 문장을 만들어 보세요</p>
     <div class="oans ${done ? (q.result ? 'ok' : 'bad') : ''}">${picked.map((ci, j) =>
       `<button class="chunk jp" data-act="ounpick" data-arg="${j}" ${done ? 'disabled' : ''}>${s.chunks[ci].html}</button>`).join('')}</div>
     ${done ? `
       <p class="feedback ${q.result ? 'ok' : 'bad'}">${q.result ? '⭕ 맞았어요!' : '정답은 이렇게 말해요'}</p>
       ${q.result ? '' : `<p class="hint"><span class="jp">${s.html}</span></p>`}
       <div class="tools" style="grid-template-columns:1fr 1fr">
-        <button class="btn" data-act="ssay" data-arg="${a(s.id)}"><b>🔊</b>듣기</button>
-        <button class="btn" data-act="rec" data-arg="${a(s.id)}"><b>🎤</b>따라 말하기</button>
+        <button class="btn" data-act="ssay" data-arg="${a(s.id)}">${ic('speak')}듣기</button>
+        <button class="btn" data-act="rec" data-arg="${a(s.id)}">${ic('mic')}따라 말하기</button>
       </div><div id="srres"></div>
       <button class="primary" style="margin-top:12px" data-act="onext">다음</button>`
     : `<div class="opool">${q.order.map(ci =>
         `<button class="chunk jp ${picked.includes(ci) ? 'used' : ''}" data-act="opick" data-arg="${ci}">${s.chunks[ci].html}</button>`).join('')}</div>
       <div class="row" style="margin-top:18px">
-        <button class="btn" data-act="ssay" data-arg="${a(s.id)}">🔊 힌트 듣기</button>
+        <button class="btn" data-act="ssay" data-arg="${a(s.id)}">${ic('speak')}힌트 듣기</button>
         <button class="btn" data-act="oreset">처음부터</button>
       </div>`}`;
 };
@@ -883,12 +1030,12 @@ VIEWS.chart = () => {
       <p class="muted">${done ? '모든 글자를 배웠어요! 약한 글자를 복습해요.' : `지금 배우는 중 · <b>${u.label}</b> (${unitIdx + 1}/${UNITS.length}단계)`}</p>
       <div class="stack" style="margin-top:10px">
         <button class="primary" data-act="kanatoday">${done ? '글자 복습하기' : '이어서 배우기'}</button>
-        ${unitIdx < KATA_START ? `<button class="btn" data-act="skiphira">히라가나는 알아요 → 가타카나부터</button>` : ''}
+        ${unitIdx < KATA_START ? `<button class="btn" data-act="skiphira">히라가나는 알아요, 가타카나부터 할게요</button>` : ''}
       </div>
     </section>
     <div class="row">
-      <button class="btn" data-act="tab" data-arg="quizsetup">✏️ 글자 퀴즈</button>
-      <button class="btn" data-act="tab" data-arg="words">🍜 메뉴판 읽기</button>
+      <button class="btn" data-act="tab" data-arg="quizsetup">글자 퀴즈</button>
+      <button class="btn" data-act="tab" data-arg="words">메뉴판 가타카나 읽기</button>
     </div>
     <div class="seg" style="margin-top:14px">
       <button class="${sc === 'hira' ? 'on' : ''}" data-act="chartscript" data-arg="hira">히라가나 <span class="jp">あ</span></button>
@@ -907,10 +1054,10 @@ function kanaSheet(k) {
       <button class="xbtn" data-act="back" aria-label="닫기">✕</button>
       <div class="sk jp" data-act="say" data-arg="${k}">${k}</div>
       <div class="sl">${o.h}<span>${o.r}</span></div>
-      ${tip ? `<div class="tip">💡 ${tip}</div>` : ''}
+      ${tip ? `<div class="tip">${tip}</div>` : ''}
       <div class="pairline">${SCRIPT_NAME[o.script === 'hira' ? 'kata' : 'hira']}로는<span class="jp">${o.pair}</span></div>
       <div class="row">
-        <button class="btn" data-act="say" data-arg="${k}">🔊 듣기</button>
+        <button class="btn" data-act="say" data-arg="${k}">${ic('speak')}듣기</button>
         <button class="btn" data-act="write" data-arg="${k}">✍️ 따라 쓰기</button>
       </div>
       <p class="note">${s ? `맞힘 ${s.c}번 · 틀림 ${s.w}번${level(k) === 2 ? ' · 외웠어요 ✅' : ''}` : '아직 퀴즈에 나오지 않았어요'}</p>
@@ -956,12 +1103,12 @@ VIEWS.intro = () => {
     <div class="qtop"><button class="icon" data-act="back" aria-label="닫기">✕</button>
       <div class="bar"><i style="width:${pct(i + 1, list.length)}%"></i></div><span>${i + 1}/${list.length}</span></div>
     <div class="intro">
-      <div class="qtitle">새 글자 · ${esc(UNITS[route.unit].label)}</div>
+      <div class="qtitle">새 글자 (${esc(UNITS[route.unit].label)})</div>
       <div class="sk jp" data-act="say" data-arg="${k}">${k}</div>
       <div class="sl">${o.h}<span>${o.r}</span></div>
-      ${tip ? `<div class="tip">💡 ${tip}</div>` : ''}
+      ${tip ? `<div class="tip">${tip}</div>` : ''}
       <div class="row" style="margin-top:16px">
-        <button class="btn" data-act="say" data-arg="${k}">🔊 듣기</button>
+        <button class="btn" data-act="say" data-arg="${k}">${ic('speak')}듣기</button>
         <button class="btn" data-act="write" data-arg="${k}">✍️ 써 보기</button>
       </div>
       <div class="stack">
@@ -981,7 +1128,7 @@ VIEWS.write = () => {
     <div class="wctl">
       <button class="btn" data-act="wmove" data-arg="-1" aria-label="이전">◀</button>
       <button class="btn" data-act="clear">지우기</button>
-      <button class="btn" data-act="say" data-arg="${k}">🔊 듣기</button>
+      <button class="btn" data-act="say" data-arg="${k}">${ic('speak')}듣기</button>
       <button class="btn" data-act="guide">${route.hide ? '본보기 보기' : '본보기 숨김'}</button>
       <button class="btn" data-act="wmove" data-arg="1" aria-label="다음">▶</button>
     </div>
@@ -1020,19 +1167,19 @@ VIEWS.settings = () => {
       <label class="field"><span>여행지</span><input type="text" data-set="place" value="${esc(settings.place)}" placeholder="예: 오사카"></label>
       <label class="field"><span>출발 날짜</span><input type="date" data-set="trip" value="${esc(settings.trip)}"></label>
     </section>
-    <section class="card"><h3>💬 문장 학습</h3>
+    <section class="card"><h3>문장 학습</h3>
       <h4 style="margin-top:0">하루에 배울 새 문장</h4>
       <div class="chips">${chip('newPerDay', 3, '3개')}${chip('newPerDay', 5, '5개')}${chip('newPerDay', 10, '10개')}</div>
       <h4>카드 앞면</h4>
       <div class="chips">${chip('cardDir', 'ko', '🇰🇷 한국어 보고 말하기')}${chip('cardDir', 'jp', '🇯🇵 일본어 듣고 뜻 떠올리기')}${chip('cardDir', 'mix', '섞어서')}</div>
       <label class="check"><input type="checkbox" data-set="furi" ${settings.furi ? 'checked' : ''}>한자 위에 읽는 법(후리가나) 표시</label>
     </section>
-    <section class="card"><h3>🔊 소리</h3>
+    <section class="card"><h3>소리</h3>
       ${voice}
       <label class="field"><span>말하기 속도 (${settings.rate.toFixed(1)})</span>
         <input type="range" min="0.5" max="1.2" step="0.1" data-set="rate" value="${settings.rate}"></label>
       <button class="btn" style="width:100%" data-act="say" data-arg="こんにちは。よろしくお願いします。">こんにちは 들어 보기</button>
-      <p class="note">🎤 따라 말하기는 처음 한 번 마이크 사용을 허용해야 해요.</p>
+      <p class="note">따라 말하기는 처음 한 번 마이크 사용을 허용해야 해요.</p>
     </section>
     <section class="card"><h3>🔤 글자 발음 표기</h3>
       <div class="chips">${chip('label', 'ko', '한글 (아)')}${chip('label', 'ro', '로마자 (a)')}${chip('label', 'both', '둘 다')}</div>
@@ -1102,14 +1249,14 @@ function sentPool(cat) { // 상황을 안 고르면 배운 문장, 배운 게 �
 }
 function listenQuiz(cat, push = true, ids) {
   const pool = ids || shuffle(sentPool(cat)).slice(0, 10).map(s => s.id);
-  const title = '듣기 퀴즈' + (cat ? ' · ' + CAT_INFO[cat].name : '');
+  const title = '듣기 퀴즈' + (cat ? ` (${CAT_INFO[cat].name})` : '');
   startQuiz({ kind: 'sent', title, again: () => listenQuiz(cat, false),
     items: shuffle(pool).map(k => ({ k, opts: sentOpts(k) })) }, push);
 }
 function orderQuiz(cat, push = true, ids) {
   const pool = ids || shuffle(sentPool(cat).filter(s => s.chunks)).slice(0, 8).map(s => s.id);
   if (!pool.length) { alert('조립할 수 있는 문장이 없어요.'); return; }
-  const title = '문장 조립' + (cat ? ' · ' + CAT_INFO[cat].name : '');
+  const title = '문장 조립' + (cat ? ` (${CAT_INFO[cat].name})` : '');
   startQuiz({ kind: 'order', title, again: () => orderQuiz(cat, false),
     items: shuffle(pool).map(k => {
       const n = SENT[k].chunks.length, idx = [...Array(n).keys()];
@@ -1130,7 +1277,7 @@ function unitQuiz(push) {
   const extra = Math.max(0, 12 - u.chars.length);
   const ks = shuffle([...u.chars, ...(prev.length ? pickWeighted(prev, Math.min(extra, prev.length)) : pickMany(u.chars, extra))]);
   const optPool = [...u.chars, ...prev];
-  startQuiz({ kind: 'kana', title: '글자 단계 학습 · ' + u.label, unitCheck: true, again: () => startKanaToday(false),
+  startQuiz({ kind: 'kana', title: '글자 단계 학습 (' + u.label + ')', unitCheck: true, again: () => startKanaToday(false),
     items: ks.map(k => ({ k, mode: stats[k] && stats[k].c > 0 && Math.random() < 0.35 ? 'listen' : 'read', opts: kanaOpts(k, optPool) })) }, push);
 }
 function finishQuiz() {
@@ -1176,6 +1323,7 @@ const ACT = {
 
   // 문장
   cat: id => go({ v: 'cat', id }, true),
+  course: id => { go({ v: 'sentences' }); const el = document.getElementById('co-' + id); if (el) el.scrollIntoView(); },
   ss: id => over({ ss: id }),
   big: id => over({ big: id }),
   fav: id => {
@@ -1187,7 +1335,7 @@ const ACT = {
     if (arg && arg.startsWith('one:')) { const id = arg.slice(4); startDeck('카드 연습', [{ id, isNew: !srs[id] }], true); return; }
     const cat = arg && arg.startsWith('cat:') ? arg.slice(4) : null;
     const { due, fresh } = plan(cat, arg === 'more' ? 5 : undefined);
-    const title = cat ? CAT_INFO[cat].e + ' ' + CAT_INFO[cat].name : '오늘의 문장 학습';
+    const title = cat ? CAT_INFO[cat].name : '오늘의 문장 학습';
     if (!due.length && !fresh.length) { alert(cat ? '이 상황의 문장을 모두 배웠고, 오늘 복습할 문장도 없어요. 👏' : '오늘 할 분량을 다 했어요!'); return; }
     startDeck(title, mixDeck(due, fresh), push);
   },
